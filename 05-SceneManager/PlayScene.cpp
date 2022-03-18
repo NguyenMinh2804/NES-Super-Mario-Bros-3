@@ -8,8 +8,9 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Coin.h"
+#include "Ground.h"
 #include "Platform.h"
-
+#include "Map.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -25,12 +26,11 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
+#define SCENE_SECTION_MAPS	3
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
-
-#define MAX_SCENE_LINE 1024
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -119,6 +119,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_GROUND: obj = new CGround(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -159,6 +160,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 
 	objects.push_back(obj);
+}
+
+void CPlayScene::_ParseSection_MAPS(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2) return;
+	wstring mapInformationPath = ToWSTR(tokens[0]);
+	wstring MatrixPath = ToWSTR(tokens[1]);
+	map = new Map();
+	map->LoadInformation(mapInformationPath.c_str());
+	map->LoadMatrix(MatrixPath.c_str());
+	map->CreateTilesFromTileSet();
+	DebugOut(L"\nParseSection_MAPS: Done");
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -214,6 +228,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -223,6 +238,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
 		}
 	}
 
@@ -267,6 +283,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	this->map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

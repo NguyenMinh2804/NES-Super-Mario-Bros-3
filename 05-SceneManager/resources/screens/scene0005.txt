@@ -4,11 +4,14 @@ resources/objects/mario.txt
 resources/objects/coin.txt
 resources/objects/cloud.txt
 resources/objects/brick.txt
+resources/objects/ground.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
+
+6	120	10
 
 # MARIO
 0	120	10
