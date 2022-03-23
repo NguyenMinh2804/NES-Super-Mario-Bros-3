@@ -60,6 +60,10 @@ void Map::Render()
 	{
 		for (int iColumn = 0; iColumn < LastColumn; iColumn++)
 		{
+			if (this->matrix[iRow][iColumn] == 0)
+			{
+				continue;
+			}
 			this->tiles[this->matrix[iRow][iColumn] - 1]->Draw(
 				(float)iColumn * TILE_WIDTH,
 				(float)iRow * TILE_HEIGHT);

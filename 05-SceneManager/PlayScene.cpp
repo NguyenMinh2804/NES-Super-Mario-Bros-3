@@ -119,8 +119,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_GROUND: obj = new CGround(x, y); break;
-
+	case OBJECT_TYPE_GROUND: 
+	{
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CGround(x, y, type); break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -275,8 +278,8 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (cy < 0) cy = 0;
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }

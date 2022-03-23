@@ -1,0 +1,38 @@
+# list of object assets to load in this scene
+[ASSETS]
+resources/objects/mario.txt
+resources/objects/brick.txt
+resources/objects/coin.txt
+resources/objects/goomba.txt
+resources/objects/cloud.txt
+resources/objects/ground.txt
+[MAPS]
+resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
+#
+[OBJECTS]
+# type	x	y	extra_settings per object type
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 6 = Ground
+# See OBJECT_TYPE constants in AssetIDs.h
+
+# MARIO
+0	16	350
+
+# GROUND
+6	0	416	1	
+6	16	416	2
+6	32	416	2
+6	48	416	2
+6	64	416	2	
+6	80	416	2
+6	86	416	2
+6	102	416	2
+6	118	416	2
+6	134	416	2
+6	150	416	2
+6	166	416	2
+6	182	416	2
+6	198	416	2
+6	214	416	2
+6	230	416	2
+6	246	416	2
+6	262	416	2
