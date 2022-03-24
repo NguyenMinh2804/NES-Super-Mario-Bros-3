@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Ground.h"
+#include "Rectangle.h"
 #include "Platform.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
@@ -123,6 +124,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		float type = (float)atof(tokens[3].c_str());
 		obj = new CGround(x, y, type); break;
+	}
+	case OBJECT_TYPE_RECTANGLE:
+	{
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CRectangle(x, y, type); break;
 	}
 	case OBJECT_TYPE_PLATFORM:
 	{

@@ -2,10 +2,10 @@
 #include "Animation.h"
 #include "Animations.h"
 
-class CGround : public CGameObject {
+class CRectangle : public CGameObject {
 	int type;
 public:
-	CGround(float x, float y, int type)
+	CRectangle(float x, float y, int type)
 	{
 		this->x = x;
 		this->y = y;
