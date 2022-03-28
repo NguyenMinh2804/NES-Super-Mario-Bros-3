@@ -11,6 +11,7 @@
 #include "Ground.h"
 #include "Rectangle.h"
 #include "Platform.h"
+#include "wood.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
 
@@ -129,6 +130,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		float type = (float)atof(tokens[3].c_str());
 		obj = new CRectangle(x, y, type); break;
+	}
+	case OBJECT_TYPE_WOOD:
+	{
+		obj = new CWood(x, y); break;
 	}
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -282,7 +287,6 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-
 	if (cx < 0) cx = 0;
 	if (cy < 0) cy = 0;
 	CGame::GetInstance()->SetCamPos(cx, cy);

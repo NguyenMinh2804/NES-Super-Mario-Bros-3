@@ -1,13 +1,12 @@
+#pragma once
 #include "GameObject.h"
 
-class CRectangle : public CGameObject {
-	int type;
+class CWood : public CGameObject {
 public:
-	CRectangle(float x, float y, int type)
+	CWood(float x, float y)
 	{
 		this->x = x;
 		this->y = y;
-		this->type = type;
 	}
 	void Render();
 	void Update(DWORD dt) {}

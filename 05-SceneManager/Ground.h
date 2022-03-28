@@ -1,6 +1,4 @@
 #include "GameObject.h"
-#include "Animation.h"
-#include "Animations.h"
 
 class CGround : public CGameObject {
 	int type;

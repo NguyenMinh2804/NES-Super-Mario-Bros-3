@@ -7,6 +7,7 @@ resources/objects/goomba.txt
 resources/objects/cloud.txt
 resources/objects/ground.txt
 resources/objects/rectangle.txt
+resources/objects/wood.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
 #
@@ -16,7 +17,22 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	16	350
+0	16	395
+# WOOD
+8	1616	400
+8	1632	400
+8	1632	384
+8	1648	400
+8	1648	384
+8	1648	368
+
+8	1712	368
+8	1712	384
+8	1712	400
+8	1728	384
+8	1728	400
+8	1744	400
+
 # RECTANGLE
 7	240	368	1
 7	256	368	2
