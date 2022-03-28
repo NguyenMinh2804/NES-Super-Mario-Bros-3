@@ -23,7 +23,7 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 #include <windows.h>
 #include <d3d10.h>
-#include "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include/d3dx10.h"
+#include "d3dx10.h"
 #include <list>
 
 #include "debug.h"
