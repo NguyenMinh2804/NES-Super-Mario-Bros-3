@@ -52,8 +52,9 @@ void Map::LoadMatrix(LPCWSTR path)
 	}
 	file.close();
 }
-void Map::Render()
+void Map::Render(float l, float t, float r, float b)
 {
+
 	int LastColumn = totalRowsOfMap;
 	int LastRow = totalColsOfMap;
 	for (int iRow = 0; iRow < LastRow; iRow++)
@@ -64,9 +65,17 @@ void Map::Render()
 			{
 				continue;
 			}
-			this->tiles[this->matrix[iRow][iColumn] - 1]->Draw(
-				(float)iColumn * TILE_WIDTH,
-				(float)iRow * TILE_HEIGHT);
+			float x, y;
+			x = (float)iColumn * TILE_WIDTH;
+			y = (float)iRow * TILE_HEIGHT;
+			float tileL = x;
+			float tileT = y;
+			float tileR = l + 16;
+			float tileB = t + 16;
+			if (tileL < r + 8 && tileR > l && tileT < b && tileB > t)
+			{
+				this->tiles[this->matrix[iRow][iColumn] - 1]->Draw(x, y);			
+			}
 		}
 	}
 }

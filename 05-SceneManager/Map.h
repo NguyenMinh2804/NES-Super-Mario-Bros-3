@@ -29,7 +29,7 @@ public:
 	void CreateTilesFromTileSet();
 	void LoadMatrix(LPCWSTR path);
 	void LoadInformation(LPCWSTR path);
-	void Render();
+	void Render(float l, float t, float r, float b);
 	int GetTotalColsOfMap() { return this->totalRowsOfMap; }
 	int GetTotalRowsOfMap() { return this->totalColsOfMap; }
 	int GetMapHeiht();

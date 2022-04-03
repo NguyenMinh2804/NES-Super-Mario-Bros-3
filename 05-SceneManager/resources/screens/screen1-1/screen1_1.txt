@@ -18,6 +18,8 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 
 # MARIO
 0	16	395
+# MARIO
+2	600	395
 # WOOD
 8	1616	400
 8	1632	400

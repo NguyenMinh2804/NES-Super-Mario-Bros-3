@@ -96,7 +96,7 @@ void CMario::OnCollisionWithRectangle(LPCOLLISIONEVENT e)
 {
 	if (e->ny>= 0)
 	{
-		e->WasCollided();
+
 	}
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
