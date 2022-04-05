@@ -14,7 +14,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y)
+void CAnimation::Render(float x, float y, bool isChange)
 {
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
@@ -33,7 +33,21 @@ void CAnimation::Render(float x, float y)
 		}
 
 	}
-
+	if (isChange == true)
+	{
+		if (currentFrame == 1)
+		{
+			y = y + 8;
+		}
+		if (currentFrame == 2)
+		{
+			y = y + 16;
+		}
+		if (currentFrame == 3)
+		{
+			y = y + 32;
+		}
+	}
 	frames[currentFrame]->GetSprite()->Draw(x, y);
 }
 

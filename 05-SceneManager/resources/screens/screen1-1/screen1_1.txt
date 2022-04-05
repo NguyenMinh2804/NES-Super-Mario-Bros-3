@@ -9,6 +9,7 @@ resources/objects/ground.txt
 resources/objects/rectangle.txt
 resources/objects/wood.txt
 resources/objects/waterPipe.txt
+resources/objects/flowerFire.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
 #
@@ -16,6 +17,10 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 
 # MARIO
 0	16	395
+
+#FLOWER_FIRE
+10	360	360
+
 # WATER_PIPE
 9	352	368	2
 9	1840	384	1
