@@ -12,6 +12,7 @@
 #include "Rectangle.h"
 #include "Platform.h"
 #include "wood.h"
+#include "WaterPipe.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
 
@@ -134,6 +135,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_WOOD:
 	{
 		obj = new CWood(x, y); break;
+	}
+	case OBJECT_TYPE_WATER_PIPE:
+	{
+		float size = (float)atof(tokens[3].c_str());
+		obj = new CWaterPipe(x, y, size); break;
 	}
 	case OBJECT_TYPE_PLATFORM:
 	{

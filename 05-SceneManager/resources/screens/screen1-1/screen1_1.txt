@@ -8,19 +8,26 @@ resources/objects/cloud.txt
 resources/objects/ground.txt
 resources/objects/rectangle.txt
 resources/objects/wood.txt
+resources/objects/waterPipe.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
 #
 [OBJECTS]
-# type	x	y	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 6 = Ground
-# See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
 0	16	395
-# MARIO
-2	600	395
+# WATER_PIPE
+9	352	368	2
+9	1840	384	1
+9	1904	368	3
+9	2304	112	11
+9	2304	368	2
+9	2368	384	1
+
 # WOOD
+8	1552	336
+8	1568	336
+
 8	1616	400
 8	1632	400
 8	1632	384
@@ -34,6 +41,13 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 8	1728	384
 8	1728	400
 8	1744	400
+
+8	2304	304
+8	2320	304
+
+8	2304	368
+8	2320	368
+
 
 # RECTANGLE
 7	240	368	1
