@@ -14,7 +14,7 @@
 #include "Wood.h"
 #include "WaterPipe.h"
 #include "FlowerFire.h"
-
+#include "Fire.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
 
@@ -146,6 +146,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FLOWER_FIRE:
 	{
 		obj = new CFlowerFire(x, y); break;
+	}
+	case OBJECT_TYPE_FIRE:
+	{
+		obj = new CFire(x, y); break;
 	}
 	case OBJECT_TYPE_PLATFORM:
 	{
