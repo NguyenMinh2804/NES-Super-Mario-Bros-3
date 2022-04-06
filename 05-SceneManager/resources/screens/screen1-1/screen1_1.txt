@@ -19,8 +19,7 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 0	16	395
 
 #FLOWER_FIRE
-10	360	360
-
+10	360	376
 # WATER_PIPE
 9	352	368	2
 9	1840	384	1
