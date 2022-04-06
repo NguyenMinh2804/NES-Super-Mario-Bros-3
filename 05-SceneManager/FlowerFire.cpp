@@ -1,8 +1,35 @@
 #include "FlowerFire.h"
+#include "Mario.h"
+#include "PlayScene.h"
+#include "Game.h"
 
 void CFlowerFire::Render()
 {
-	CSprites::GetInstance()->Get(101)->Draw(x, y);
+	float cx, cy;
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	mario->GetPosition(cx, cy);
+	if (cx < x)
+	{
+		if (cy < 320)
+		{
+			CSprites::GetInstance()->Get(102)->Draw(x, y);
+		}
+		else
+		{
+			CSprites::GetInstance()->Get(101)->Draw(x, y);
+		}
+	}
+	else
+	{
+		if (cy < 320)
+		{
+			CSprites::GetInstance()->Get(102)->Draw(x, y);
+		}
+		else
+		{
+			CSprites::GetInstance()->Get(101)->Draw(x, y);
+		}
+	}
 }
 
 void CFlowerFire::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -15,24 +42,38 @@ void CFlowerFire::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	Up();
-	Down();
+	if (state == 0)
+	{
+		Up();
+	}
+	else if (state == 1)
+	{
+		SetState(2);
+	}
+	else
+	{
+		Down();
+	}
 }
 void CFlowerFire::Up()
 {
-	if (y > 345)
+	if (y > 344)
 	{
 		y = y - 0.3;
+		return;
 	}
+	SetState(1);
 }
 void CFlowerFire::Down()
 {
-	//if (y < 376)
-	//{
-	//	y = y + 0.3;
-	//}
+	if (y < 378)
+	{
+		y = y + 0.3;
+		return;
+	}
+	SetState(0);
 }
-void CFlowerFire::OnNoCollision(DWORD dt)
+void CFlowerFire::SetState(int state)
 {
-	//y += vy * dt;
-};
+	CGameObject::SetState(state);
+}
