@@ -4,23 +4,24 @@ resources/objects/mario.txt
 resources/objects/brick.txt
 resources/objects/coin.txt
 resources/objects/goomba.txt
-resources/objects/cloud.txt
 resources/objects/ground.txt
 resources/objects/rectangle.txt
 resources/objects/wood.txt
 resources/objects/waterPipe.txt
 resources/objects/flowerFire.txt
 resources/objects/fire.txt
+resources/objects/brickQuestion.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
 #
 [OBJECTS]
 
 # MARIO
-0	16	395
+0	300	395
 
-#FIRE
-11	360	344
+#BRICK_QUESTION
+12	176	352
+12	192	352
 
 #FLOWER_FIRE
 10	360	376

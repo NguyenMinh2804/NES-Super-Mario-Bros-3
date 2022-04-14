@@ -199,7 +199,6 @@ int WINAPI WinMain(
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
-
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
 	game->Load(L"resources/mario-sample.txt");  
 

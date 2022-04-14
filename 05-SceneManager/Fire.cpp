@@ -14,3 +14,9 @@ void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + 8;
 	b = t + 8;
 }
+
+void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	x = x - 0.2;
+	y = y - 0.2;
+}

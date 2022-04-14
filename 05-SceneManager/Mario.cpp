@@ -8,6 +8,7 @@
 #include "Rectangle.h"
 #include "FlowerFire.h"
 #include "Collision.h"
+#include "BrickQuestion.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -55,6 +56,19 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CFlowerFire*>(e->obj))
 		OnCollisionWithFlowerFire(e);
+	else if (dynamic_cast<CBrickQuestion*>(e->obj))
+		OnCollisionWithBrickQuestion(e);
+}
+void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
+{
+	CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+	if (e->ny > 0)
+	{
+		if (brickQuestion->GetState() != 0)
+		{
+			brickQuestion->SetState(0);
+		}
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

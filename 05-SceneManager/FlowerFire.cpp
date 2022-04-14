@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Game.h"
+#include "fire.h"
 
 void CFlowerFire::Render()
 {
@@ -49,12 +50,16 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else if (state == 1)
 	{
 		SetState(2);
+		CFire* fire = new CFire(360, 370);
+		fire->Render();
+		//fire->Update(dt, coObjects);
 	}
 	else
 	{
 		Down();
 	}
 }
+
 void CFlowerFire::Up()
 {
 	if (y > 344)
@@ -64,6 +69,7 @@ void CFlowerFire::Up()
 	}
 	SetState(1);
 }
+
 void CFlowerFire::Down()
 {
 	if (y < 378)
@@ -73,6 +79,7 @@ void CFlowerFire::Down()
 	}
 	SetState(0);
 }
+
 void CFlowerFire::SetState(int state)
 {
 	CGameObject::SetState(state);
