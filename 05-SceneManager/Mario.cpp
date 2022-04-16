@@ -7,6 +7,7 @@
 #include "Portal.h"
 #include "Rectangle.h"
 #include "FlowerFire.h"
+#include "Fire.h"
 #include "Collision.h"
 #include "BrickQuestion.h"
 
@@ -58,7 +59,28 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFlowerFire(e);
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
 		OnCollisionWithBrickQuestion(e);
+	//else if (dynamic_cast<CFire*>(e->obj))
+	//	OnCollisionWithFire(e);
 }
+
+void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
+{
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+		e->obj->Delete();
+	}
+}
+
 void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 {
 	CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
@@ -67,6 +89,7 @@ void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 		if (brickQuestion->GetState() != 0)
 		{
 			brickQuestion->SetState(0);
+			brickQuestion->DropItem(1);
 		}
 	}
 }
@@ -121,6 +144,7 @@ void CMario::OnCollisionWithFlowerFire(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();

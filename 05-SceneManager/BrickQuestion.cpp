@@ -1,4 +1,6 @@
 #include "BrickQuestion.h"
+#include "Mushroom.h"
+#include "PlayScene.h"
 
 void CBrickQuestion::Render()
 {
@@ -29,4 +31,33 @@ void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CBrickQuestion::SetState(int state)
 {
 	CGameObject::SetState(state);
+}
+
+void CBrickQuestion::DropItem(int marioLevel)
+{
+	CGameObject* obj;
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	if (type == 1)
+	{
+
+	}
+	else
+	{
+		switch (marioLevel)
+		{
+		case 1:
+		{
+			obj = new CMushroom(x + 16, y);
+			currentScene->AddObject(obj);
+		}
+		case 2:
+		{
+
+		}
+		case 3:
+		{
+
+		}
+		}
+	}
 }

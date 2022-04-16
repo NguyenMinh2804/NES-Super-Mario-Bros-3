@@ -3,11 +3,14 @@
 #include "Animations.h"
 class CBrickQuestion : public CGameObject {
 public:
-	CBrickQuestion(float x, float y) : CGameObject(x, y) {
+	int type;
+	CBrickQuestion(float x, float y, int type) : CGameObject(x, y) {
+		type = type;
 		SetState(1);
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
+	void DropItem(int marioLevel);
 };

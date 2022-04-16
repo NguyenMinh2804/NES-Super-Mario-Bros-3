@@ -18,6 +18,7 @@
 #include "BrickQuestion.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
+#include "Mushroom.h"
 
 using namespace std;
 
@@ -150,12 +151,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_BRICK_QUESTION:
 	{
-		obj = new CBrickQuestion(x, y); break;
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CBrickQuestion(x, y, type); break;
 	}
-	//case OBJECT_TYPE_FIRE:
-	//{
-	//	obj = new CFire(x, y); break;
-	//}
+	case OBJECT_TYPE_FIRE:
+	{
+		obj = new CFire(x, y, 1); break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -174,8 +176,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	// General object setup
 	obj->SetPosition(x, y);
 
-
-	objects.push_back(obj);
+	AddObject(obj);
 }
 
 void CPlayScene::_ParseSection_MAPS(string line)
@@ -368,4 +369,9 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+}
+
+void CPlayScene::AddObject(CGameObject *object)
+{
+	objects.push_back(object);
 }

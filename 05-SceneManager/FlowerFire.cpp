@@ -14,10 +14,12 @@ void CFlowerFire::Render()
 		if (cy < 320)
 		{
 			CSprites::GetInstance()->Get(102)->Draw(x, y);
+			direction = 2;
 		}
 		else
 		{
 			CSprites::GetInstance()->Get(101)->Draw(x, y);
+			direction = 1;
 		}
 	}
 	else
@@ -25,10 +27,12 @@ void CFlowerFire::Render()
 		if (cy < 320)
 		{
 			CSprites::GetInstance()->Get(102)->Draw(x, y);
+			direction = 3;
 		}
 		else
 		{
 			CSprites::GetInstance()->Get(101)->Draw(x, y);
+			direction = 4;
 		}
 	}
 }
@@ -49,10 +53,10 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else if (state == 1)
 	{
+		CGameObject* obj = new CFire(x, y - 8, direction);
+		CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		currentScene->AddObject(obj);
 		SetState(2);
-		CFire* fire = new CFire(360, 370);
-		fire->Render();
-		//fire->Update(dt, coObjects);
 	}
 	else
 	{

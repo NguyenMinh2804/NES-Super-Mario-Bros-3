@@ -1,4 +1,5 @@
 #include "Fire.h"
+#include "Mario.h"
 
 void CFire::Render()
 {
@@ -17,6 +18,50 @@ void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	x = x - 0.2;
-	y = y - 0.2;
+	switch (direction)
+	{
+	case 1:
+	{
+		x = x - 0.6;
+		//y = y + 0.6;
+		break;
+	}
+	case 2: 
+	{
+		x = x - 0.6;
+		y = y - 0.6;
+		break;
+	}
+	case 3:
+	{
+		x = x + 0.6;
+		y = y - 0.6;
+		break;
+	}
+	case 4:
+	{
+		x = x + 0.6;
+		y = y + 0.6;
+		break;
+	}
+	}
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+
+
+void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	this->Delete();
+	//if (dynamic_cast<CMario*>(e->obj))
+	//	OnCollisionWithMario(e);
+}
+
+void CFire::OnNoCollision(DWORD dt)
+{
+
+}
+//void OnCollisionWithMario(LPCOLLISIONEVENT e)
+//{
+//	return;
+//}

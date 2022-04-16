@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "Mushroom.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -502,7 +503,6 @@ void CGame::Load(LPCWSTR gameFile)
 		}
 	}
 	f.close();
-
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
 	SwitchScene();
