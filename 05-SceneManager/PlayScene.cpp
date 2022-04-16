@@ -154,10 +154,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float type = (float)atof(tokens[3].c_str());
 		obj = new CBrickQuestion(x, y, type); break;
 	}
-	case OBJECT_TYPE_FIRE:
-	{
-		obj = new CFire(x, y, 1); break;
-	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

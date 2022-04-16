@@ -10,6 +10,7 @@
 #include "Fire.h"
 #include "Collision.h"
 #include "BrickQuestion.h"
+#include "Mushroom.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -59,8 +60,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFlowerFire(e);
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
 		OnCollisionWithBrickQuestion(e);
-	//else if (dynamic_cast<CFire*>(e->obj))
-	//	OnCollisionWithFire(e);
+	else if (dynamic_cast<CFire*>(e->obj))
+		OnCollisionWithFire(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
 }
 
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)

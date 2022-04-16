@@ -1,67 +1,78 @@
 #include "Fire.h"
 #include "Mario.h"
 
-void CFire::Render()
+CFire::CFire(float x, float y, int direction) : CGameObject(x, y)
 {
-	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(110)->Render(x, y);
-	//RenderBoundingBox();
-}
-
-void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-	l = x - 8 / 2;
-	t = y - 8 / 2;
-	r = l + 8;
-	b = t + 8;
-}
-
-void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
+	this->direction = direction;
 	switch (direction)
 	{
 	case 1:
 	{
-		x = x - 0.6;
-		//y = y + 0.6;
+		vx = -0.055f;
+		vy = 0.02f;
 		break;
 	}
-	case 2: 
+	case 2:
 	{
-		x = x - 0.6;
-		y = y - 0.6;
+		vx = -0.055f;
+		vy = -0.02f;
 		break;
 	}
 	case 3:
 	{
-		x = x + 0.6;
-		y = y - 0.6;
+		vx = 0.055f;
+		vy = 0.02f;
 		break;
 	}
 	case 4:
 	{
-		x = x + 0.6;
-		y = y + 0.6;
+		vx = 0.055f;
+		vy = 0.02f;
 		break;
 	}
 	}
+
+	SetState(0);
+}
+
+void CFire::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x - 8 / 2;
+	top = y - 8 / 2;
+	right = left + 8;
+	bottom = top + 8;
+}
+
+void CFire::OnNoCollision(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+};
+
+void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	//if (!e->obj->IsBlocking()) return;
+	//if (dynamic_cast<CFire*>(e->obj)) return;
+	//this->Delete();
+}
+
+void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vy += 0 * dt;
+	vx += 0 * dt;
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
-void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
+void CFire::Render()
 {
-	this->Delete();
-	//if (dynamic_cast<CMario*>(e->obj))
-	//	OnCollisionWithMario(e);
+	CAnimations* animations = CAnimations::GetInstance();
+	animations->Get(110)->Render(x, y);
 }
 
-void CFire::OnNoCollision(DWORD dt)
+void CFire::SetState(int state)
 {
-
+	CGameObject::SetState(state);
 }
-//void OnCollisionWithMario(LPCOLLISIONEVENT e)
-//{
-//	return;
-//}
