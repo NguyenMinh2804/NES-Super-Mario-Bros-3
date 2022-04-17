@@ -49,26 +49,34 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == 0)
 	{
-		Up();
+		if (GetTickCount64() - up_start > 2000)
+		{
+			Up();
+		}
+		StartFire();
 	}
 	else if (state == 1)
 	{
-		CGameObject* obj = new CFire(x, y - 8, direction);
-		CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-		currentScene->AddObject(obj);
-		SetState(2);
+		if (GetTickCount64() - fire_start > 1000)
+		{
+			CGameObject* obj = new CFire(x, y - 8, direction);
+			CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+			currentScene->AddObject(obj);
+			SetState(2);
+		}
 	}
 	else
 	{
 		Down();
+		StartUp();
 	}
 }
 
 void CFlowerFire::Up()
 {
-	if (y > 344)
+	if (y > 345)
 	{
-		y = y - 0.3;
+		y = y - 0.8;
 		return;
 	}
 	SetState(1);
@@ -78,7 +86,7 @@ void CFlowerFire::Down()
 {
 	if (y < 378)
 	{
-		y = y + 0.3;
+		y = y + 0.8;
 		return;
 	}
 	SetState(0);

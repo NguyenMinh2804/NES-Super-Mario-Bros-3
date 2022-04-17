@@ -51,16 +51,13 @@ void CFire::OnNoCollision(DWORD dt)
 
 void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//if (!e->obj->IsBlocking()) return;
-	//if (dynamic_cast<CFire*>(e->obj)) return;
-	//this->Delete();
+
 }
 
 void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += 0 * dt;
 	vx += 0 * dt;
-
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

@@ -12,10 +12,10 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_JUMP_SPEED_Y		0.6f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_SPEED_Y		0.528f
+#define MARIO_JUMP_RUN_SPEED_Y	0.528f
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.0018f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -120,8 +120,8 @@ class CMario : public CGameObject
 	void OnCollisionWithFlowerFire(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e);
 	void OnCollisionWithFire(LPCOLLISIONEVENT e);
-	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e); 
+	void OnCollisionWithRectangle(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 

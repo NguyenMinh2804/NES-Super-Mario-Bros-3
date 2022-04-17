@@ -1,6 +1,7 @@
 #include "BrickQuestion.h"
 #include "Mushroom.h"
 #include "PlayScene.h"
+#include "Coin.h"
 
 void CBrickQuestion::Render()
 {
@@ -39,7 +40,8 @@ void CBrickQuestion::DropItem(int marioLevel)
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	if (type == 1)
 	{
-
+		obj = new CCoin(x, y - 16);
+		currentScene->AddObject(obj);
 	}
 	else
 	{

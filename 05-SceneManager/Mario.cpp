@@ -41,14 +41,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
+
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0)
+		{
+			isOnPlatform = true;
+			vy = 0;
+		}
 	}
 	else
+	{
 		if (e->nx != 0 && e->obj->IsBlocking())
 		{
 			vx = 0;
 		}
+	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -64,6 +71,18 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CRectangle*>(e->obj))
+		OnCollisionWithRectangle(e);
+}
+
+
+void CMario::OnCollisionWithRectangle(LPCOLLISIONEVENT e)
+{
+	//if (e->ny < 0)
+	//{
+	//	isOnPlatform = true;
+	//	vy = 0;
+	//}
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)

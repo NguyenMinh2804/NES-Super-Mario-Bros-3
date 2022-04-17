@@ -5,7 +5,7 @@ class CBrickQuestion : public CGameObject {
 public:
 	int type;
 	CBrickQuestion(float x, float y, int type) : CGameObject(x, y) {
-		type = type;
+		this->type = type;
 		SetState(1);
 	}
 	void Render();

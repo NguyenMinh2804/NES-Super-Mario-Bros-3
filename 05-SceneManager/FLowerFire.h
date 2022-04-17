@@ -4,8 +4,12 @@
 class CFlowerFire : public CGameObject {
 public:
 	int direction;
+	ULONGLONG fire_start;
+	ULONGLONG up_start;
 	CFlowerFire(float x, float y) : CGameObject(x, y) {
 		SetState(0);
+		fire_start = -1;
+		up_start = -1;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -13,4 +17,6 @@ public:
 	void Up();
 	void Down();
 	void SetState(int state);
+	void StartFire() {fire_start = GetTickCount64(); }
+	void StartUp() { up_start = GetTickCount64(); }
 };
