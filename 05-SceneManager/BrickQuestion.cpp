@@ -2,6 +2,7 @@
 #include "Mushroom.h"
 #include "PlayScene.h"
 #include "Coin.h"
+#include "Leaf.h"
 
 void CBrickQuestion::Render()
 {
@@ -51,14 +52,13 @@ void CBrickQuestion::DropItem(int marioLevel)
 		{
 			obj = new CMushroom(x, y - 16);
 			currentScene->AddObject(obj);
+			break;
 		}
 		case 2:
 		{
-
-		}
-		case 3:
-		{
-
+			obj = new CLeaf(x, y);
+			currentScene->AddObject(obj);
+			break;
 		}
 		}
 	}

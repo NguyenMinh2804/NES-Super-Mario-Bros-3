@@ -12,6 +12,7 @@ resources/objects/flowerFire.txt
 resources/objects/fire.txt
 resources/objects/brickQuestion.txt
 resources/objects/mushroom.txt
+resources/objects/leaf.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
 #
@@ -21,9 +22,9 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 0	300	395
 
 #BRICK_QUESTION
-12	176	352	1
-12	192	352	1
-12	224	304	1
+12	176	352	2
+12	192	352	2
+12	224	304	2
 12	240	304	2
 
 #FLOWER_FIRE

@@ -11,6 +11,7 @@
 #include "Collision.h"
 #include "BrickQuestion.h"
 #include "Mushroom.h"
+#include "Leaf.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -71,6 +72,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CRectangle*>(e->obj))
 		OnCollisionWithRectangle(e);
 }
@@ -85,9 +88,22 @@ void CMario::OnCollisionWithRectangle(LPCOLLISIONEVENT e)
 	//}
 }
 
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	if (level < 2)
+	{
+		level = level++;
+	}
+}
+
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
+	if (level < 2)
+	{
+		level = level++;
+	}
 }
 
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
@@ -96,7 +112,7 @@ void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
-			level = MARIO_LEVEL_SMALL;
+			level--;
 			StartUntouchable();
 		}
 		else
@@ -116,7 +132,7 @@ void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 		if (brickQuestion->GetState() != 0)
 		{
 			brickQuestion->SetState(0);
-			brickQuestion->DropItem(1);
+			brickQuestion->DropItem(level);
 		}
 	}
 }
@@ -142,7 +158,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					level--;
 					StartUntouchable();
 				}
 				else
@@ -161,7 +177,7 @@ void CMario::OnCollisionWithFlowerFire(LPCOLLISIONEVENT e)
 	{
 		if (level > MARIO_LEVEL_SMALL)
 		{
-			level = MARIO_LEVEL_SMALL;
+			level--;
 			StartUntouchable();
 		}
 		else

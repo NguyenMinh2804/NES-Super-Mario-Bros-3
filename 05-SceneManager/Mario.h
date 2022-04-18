@@ -12,10 +12,10 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_JUMP_SPEED_Y		0.528f
-#define MARIO_JUMP_RUN_SPEED_Y	0.528f
+#define MARIO_JUMP_SPEED_Y		0.53f
+#define MARIO_JUMP_RUN_SPEED_Y	0.53f
 
-#define MARIO_GRAVITY			0.0018f
+#define MARIO_GRAVITY			0.0018
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -121,6 +121,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e);
 	void OnCollisionWithFire(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e); 
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithRectangle(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -133,7 +134,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
