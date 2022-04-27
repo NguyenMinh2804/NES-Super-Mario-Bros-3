@@ -14,18 +14,23 @@ resources/objects/brickQuestion.txt
 resources/objects/mushroom.txt
 resources/objects/leaf.txt
 [MAPS]
-resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt
+resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	100000
 #
+
 [OBJECTS]
 
-# MARIO
-0	300	395
+#GOOMBA
+2	176	400
+2	200	400
 
 #BRICK_QUESTION
-12	176	352	2
-12	192	352	2
-12	224	304	2
+12	176	352	1
+12	192	352	1
+12	224	304	1
 12	240	304	2
+12	672	384	2
+12	720	352	1
+12	1520	368	2
 
 #FLOWER_FIRE
 10	360	376
@@ -201,9 +206,9 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 6	2224	416	2
 6	2240	416	2
 6	2256	416	2
-6	2272	416	2
+6	2272	416	3
 
-6	2304	416	2
+6	2304	416	1
 6	2320	416	2
 6	2336	416	2
 6	2352	416	2
@@ -238,3 +243,6 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 6	2816	416	2
 6	2832	416	2
 6	2848	416	3
+
+# MARIO
+0	300	300

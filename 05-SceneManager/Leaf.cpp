@@ -59,8 +59,8 @@
 
 CLeaf::CLeaf(float x, float y) : CGameObject(x, y)
 {
-	ax = 0.00005f;
-	ay = 0.00001f;
+	ax = 0.00008f;
+	ay = 0.00003f;
 	vx = 0;
 	vy = 0;
 	SetState(0);

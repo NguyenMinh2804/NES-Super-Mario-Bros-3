@@ -16,8 +16,8 @@ protected:
 	Map* map = NULL;
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;					
-
 	vector<LPGAMEOBJECT> objects;
+	int gameTime;
 	void _ParseSection_MAPS(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

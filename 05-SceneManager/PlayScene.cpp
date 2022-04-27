@@ -118,7 +118,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
+		obj = new CMario(x, y, gameTime);
 		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
@@ -181,6 +181,7 @@ void CPlayScene::_ParseSection_MAPS(string line)
 	if (tokens.size() < 2) return;
 	wstring mapInformationPath = ToWSTR(tokens[0]);
 	wstring MatrixPath = ToWSTR(tokens[1]);
+	gameTime = std::stoi(ToWSTR(tokens[2]));
 	map = new Map();
 	map->LoadInformation(mapInformationPath.c_str());
 	map->LoadMatrix(MatrixPath.c_str());
@@ -240,8 +241,8 @@ void CPlayScene::Load()
 
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
-		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line == "[MAPS]") { section = SCENE_SECTION_MAPS; continue; };
+		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -250,8 +251,8 @@ void CPlayScene::Load()
 		switch (section)
 		{
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
-		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
+		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		}
 	}
 

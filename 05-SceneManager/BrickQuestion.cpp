@@ -54,9 +54,9 @@ void CBrickQuestion::DropItem(int marioLevel)
 			currentScene->AddObject(obj);
 			break;
 		}
-		case 2:
+		default: 
 		{
-			obj = new CLeaf(x, y);
+			obj = new CLeaf(x, y - 25);
 			currentScene->AddObject(obj);
 			break;
 		}

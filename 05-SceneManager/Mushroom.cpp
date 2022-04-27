@@ -3,8 +3,8 @@
 CMushroom::CMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = 0.002f;
-	vx = 0.06f;
+	this->ay = 0.001f;
+	vx = 0.045f;
 	SetState(0);
 }
 
