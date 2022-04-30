@@ -49,7 +49,7 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == 0)
 	{
-		if (GetTickCount64() - up_start > 2000)
+		if (GetTickCount64() - up_start > 3000)
 		{
 			Up();
 		}
@@ -74,7 +74,7 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFlowerFire::Up()
 {
-	if (y > 345)
+	if (y > startY - 31)
 	{
 		y = y - 0.8;
 		return;
@@ -84,7 +84,7 @@ void CFlowerFire::Up()
 
 void CFlowerFire::Down()
 {
-	if (y < 378)
+	if (y < startY + 31)
 	{
 		y = y + 0.8;
 		return;

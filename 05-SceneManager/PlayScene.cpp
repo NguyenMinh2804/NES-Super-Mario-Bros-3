@@ -134,7 +134,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_RECTANGLE:
 	{
 		float type = (float)atof(tokens[3].c_str());
-		obj = new CRectangle(x, y, type); break;
+		float size = (float)atof(tokens[4].c_str());
+		obj = new CRectangle(x, y, type, size); break;
 	}
 	case OBJECT_TYPE_WOOD:
 	{
@@ -288,6 +289,7 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 	if (cx < 0) cx = -9;
+	if (cx > 2550) cx = 2550;
 	if (cy < 0) cy = 0;
 	if (cy > 223 || cy > 90) cy = 223;
 

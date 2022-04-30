@@ -2,6 +2,9 @@
 #include "GameObject.h"
 
 #include "debug.h"
+#include "Leaf.h"
+#include "Mario.h"
+#include "Rectangle.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
@@ -174,10 +177,10 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	//std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
-void CCollision::Filter( LPGAMEOBJECT objSrc,
+void CCollision::Filter(LPGAMEOBJECT objSrc,
 	vector<LPCOLLISIONEVENT>& coEvents,
-	LPCOLLISIONEVENT &colX,
-	LPCOLLISIONEVENT &colY,
+	LPCOLLISIONEVENT& colX,
+	LPCOLLISIONEVENT& colY,
 	int filterBlock = 1,		// 1 = only filter block collisions, 0 = filter all collisions 
 	int filterX = 1,			// 1 = process events on X-axis, 0 = skip events on X 
 	int filterY = 1)			// 1 = process events on Y-axis, 0 = skip events on Y
@@ -192,6 +195,10 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
+		if (dynamic_cast<CRectangle*>(coEvents[i]->obj) && c->ny > 0)
+		{
+			filterY = 0;
+		}
 		if (c->isDeleted) continue;
 		if (c->obj->IsDeleted()) continue; 
 
@@ -220,10 +227,11 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 */
 void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	LPCOLLISIONEVENT colX = NULL; 
 	LPCOLLISIONEVENT colY = NULL;
-
+	
 	coEvents.clear();
 
 	if (objSrc->IsCollidable())

@@ -81,10 +81,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithRectangle(LPCOLLISIONEVENT e)
 {
-	if (e->ny < 0)
-	{
-
-	}
 }
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
@@ -319,19 +315,29 @@ int CMario::GetAniIdFly()
 	int aniId = -1;
 	if (!isOnPlatform)
 	{
-		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		if (ay == MARIO_SLOW_GRAVITY)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_FLY_RUN_RIGHT;
+				aniId = ID_ANI_MARIO_SLOW_FALL_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_JUMP_FLY_RUN_LEFT;
+				aniId = ID_ANI_MARIO_SLOW_FALL_LEFT;
 		}
 		else
 		{
-			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_FLY_WALK_RIGHT;
+			if (abs(ax) == MARIO_ACCEL_RUN_X)
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_JUMP_FLY_RUN_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_JUMP_FLY_RUN_LEFT;
+			}
 			else
-				aniId = ID_ANI_MARIO_JUMP_FLY_WALK_LEFT;
+			{
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_JUMP_FLY_WALK_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_JUMP_FLY_WALK_LEFT;
+			}
 		}
 	}
 	else
@@ -390,7 +396,7 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 
-	DebugOutTitle(L"Coins: %d    -    Game Time: %d - ax: %d", coin, (gameTime - (GetTickCount64() - game_start))/1000, ax);
+	DebugOutTitle(L"Coins: %d    -    Game Time: %d", coin, (gameTime - (GetTickCount64() - game_start)) / 1000);
 }
 
 void CMario::SetState(int state)
@@ -402,14 +408,29 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
-		maxVx = MARIO_RUNNING_SPEED;		
-		ax = MARIO_ACCEL_RUN_X;
+		maxVx = MARIO_RUNNING_SPEED;
+		if (ax < MARIO_ACCEL_RUN_X)
+		{
+			ax += 0.000009f;
+		}
+		else
+		{
+			ax = MARIO_ACCEL_RUN_X;
+		}
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		ax = -MARIO_ACCEL_RUN_X;
+		if (ax > -MARIO_ACCEL_RUN_X)
+		{
+			ax -= 0.000009f;
+		}
+		else
+		{
+			ax = -MARIO_ACCEL_RUN_X;
+		}
+		test++;
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
@@ -436,6 +457,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
+		ay = MARIO_GRAVITY;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 
@@ -468,8 +490,14 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_SLOW_FALL:
+		vy = 0;
+		ay = MARIO_SLOW_GRAVITY;
+		break;
+	case MARIO_STATE_FLY:
+		vy = -MARIO_JUMP_RUN_SPEED_Y;
+		break;
 	}
-
 	CGameObject::SetState(state);
 }
 

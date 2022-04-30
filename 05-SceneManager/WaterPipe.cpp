@@ -10,7 +10,6 @@ void CWaterPipe::Render()
 		CSprites::GetInstance()->Get(93)->Draw(x, y + 16*i);
 		CSprites::GetInstance()->Get(94)->Draw(x + 16, y + 16*i);
 	}
-
 }
 
 void CWaterPipe::GetBoundingBox(float& l, float& t, float& r, float& b)

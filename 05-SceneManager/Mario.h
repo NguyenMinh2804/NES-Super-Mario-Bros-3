@@ -16,6 +16,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.001777777777777f
+#define MARIO_SLOW_GRAVITY			0.0001f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -35,6 +36,9 @@
 
 #define MARIO_STATE_FLY_RIGHT	700
 #define MARIO_STATE_FLY_LEFT	800
+
+#define MARIO_STATE_SLOW_FALL	900
+#define MARIO_STATE_FLY	901
 
 #pragma region ANIMATION_ID
 
@@ -101,6 +105,9 @@
 
 #define ID_ANI_MARIO_FLY_SIT_RIGHT 2900
 #define ID_ANI_MARIO_FLY_SIT_LEFT 2901
+
+#define ID_ANI_MARIO_SLOW_FALL_RIGHT 2902
+#define ID_ANI_MARIO_SLOW_FALL_LEFT 2903
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -133,14 +140,11 @@ class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
 	float maxVx;
-	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
-	int level; 
 	int untouchable; 
 	int gameTime;
 	ULONGLONG untouchable_start;
 	ULONGLONG game_start;
-	BOOLEAN isOnPlatform;
 	int coin; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -157,6 +161,10 @@ class CMario : public CGameObject
 	int GetAniIdFly();
 
 public:
+	int level;
+	BOOLEAN isOnPlatform;
+	int test;
+	float ax;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -171,6 +179,7 @@ public:
 		game_start = GetTickCount64();
 		isOnPlatform = false;
 		coin = 0;
+		test = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

@@ -72,7 +72,7 @@ void Map::Render(float l, float t, float r, float b)
 			float tileT = y;
 			float tileR = l + 16;
 			float tileB = t + 16;
-			if (tileL < r + 8 && tileR > l && tileT < b && tileB > t)
+			if (tileL < r + 8 && tileR > l && tileT < b + 8 && tileB > t)
 			{
 				this->tiles[this->matrix[iRow][iColumn] - 1]->Draw(x, y);			
 			}
