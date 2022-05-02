@@ -19,6 +19,7 @@
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
 #include "Mushroom.h"
+#include "FlyGoomba.h"
 
 using namespace std;
 
@@ -124,6 +125,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_FLYGOOMBA: obj = new CFlyGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_GROUND:
@@ -291,7 +293,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx < 0) cx = -9;
 	if (cx > 2550) cx = 2550;
 	if (cy < 0) cy = 0;
-	if (cy > 223 || cy > 90) cy = 223;
+	if (cy > 223 || cy > 120) cy = 223;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 	PurgeDeletedObjects();

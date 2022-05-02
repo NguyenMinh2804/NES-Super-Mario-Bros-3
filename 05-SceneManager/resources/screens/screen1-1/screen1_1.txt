@@ -13,6 +13,7 @@ resources/objects/fire.txt
 resources/objects/brickQuestion.txt
 resources/objects/mushroom.txt
 resources/objects/leaf.txt
+resources/objects/flyGoomba.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	100000
 #
@@ -21,7 +22,8 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 
 #GOOMBA
 2	176	400
-2	200	400
+15	200	400
+2	700	384
 
 #BRICK_QUESTION
 12	176	352	1
