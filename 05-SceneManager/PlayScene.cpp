@@ -20,6 +20,8 @@
 #include "SampleKeyEventHandler.h"
 #include "Mushroom.h"
 #include "FlyGoomba.h"
+#include "InvisibleWall.h"
+#include "Wall.h"
 
 using namespace std;
 
@@ -108,7 +110,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int object_type = atoi(tokens[0].c_str());
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
-
 	CGameObject* obj = NULL;
 
 	switch (object_type)
@@ -163,8 +164,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
+	case OBJECT_TYPE_INVISIBLEWALL:
+	{
+		obj = new CInvisibleWall(x, y);
+		break;
+	}
+	case OBJECT_TYPE_WALL:
+	{
+		obj = new CWall(x, y);
+		break;
+	}
 
 
 	default:
@@ -290,7 +301,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-	if (cx < 0) cx = -9;
+	//if (cx < 0) cx = -9;
 	if (cx > 2550) cx = 2550;
 	if (cy < 0) cy = 0;
 	if (cy > 223 || cy > 120) cy = 223;

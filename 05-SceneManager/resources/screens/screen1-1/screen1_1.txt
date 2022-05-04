@@ -19,11 +19,21 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 #
 
 [OBJECTS]
+#Wall
+17	0	500
+17	0	400
+17	0	384
+17	0	368
+17	0	352
+17	0	336
+17	0	320
+17	0	304
+17	0	288
 
-#GOOMBA
-2	176	400
-15	200	400
-2	700	384
+#InvisibleWall
+16	1104	384
+16	1104	368
+16	1104	352
 
 #BRICK_QUESTION
 12	176	352	1
@@ -258,5 +268,12 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 6	2832	416	2
 6	2848	416	3
 
+#GOOMBA
+2	224	400
+2	528	400
+2	823	384
+2	855	384
+15	871	384
+
 # MARIO
-0	300	300
+0	700	300

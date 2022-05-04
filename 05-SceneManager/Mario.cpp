@@ -12,6 +12,8 @@
 #include "BrickQuestion.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "FlyGoomba.h"
+#include "InvisibleWall.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -29,7 +31,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		SetState(MARIO_STATE_DIE);
 	}
-	isOnPlatform = false;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -72,6 +73,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CFlyGoomba*>(e->obj))
+		OnCollisionWithFlyGoomba(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CRectangle*>(e->obj))
@@ -142,6 +145,45 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (untouchable == 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level--;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithFlyGoomba(LPCOLLISIONEVENT e)
+{
+	CFlyGoomba* flyGoomba = dynamic_cast<CFlyGoomba*>(e->obj);
+	if (e->ny < 0)
+	{
+		if (flyGoomba->GetState() != FLYGOOMBA_STATE_DIE)
+		{
+			if (flyGoomba->GetIsFly())
+			{
+				flyGoomba->SetIsFly(false);
+			}
+			else
+			{
+				flyGoomba->SetState(FLYGOOMBA_STATE_DIE);
+			}
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else
+	{
+		if (untouchable == 0)
+		{
+			if (flyGoomba->GetState() != FLYGOOMBA_STATE_DIE)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -411,7 +453,7 @@ void CMario::SetState(int state)
 		maxVx = MARIO_RUNNING_SPEED;
 		if (ax < MARIO_ACCEL_RUN_X)
 		{
-			ax += 0.000009f;
+			ax += 0.000007f;
 		}
 		else
 		{
@@ -424,7 +466,7 @@ void CMario::SetState(int state)
 		maxVx = -MARIO_RUNNING_SPEED;
 		if (ax > -MARIO_ACCEL_RUN_X)
 		{
-			ax -= 0.000009f;
+			ax -= 0.000007f;
 		}
 		else
 		{
@@ -449,6 +491,7 @@ void CMario::SetState(int state)
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
+			isOnPlatform = false;
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else

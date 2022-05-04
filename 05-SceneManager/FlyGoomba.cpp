@@ -1,36 +1,49 @@
 #include "FlyGoomba.h"
+#include "Goomba.h"
+#include "InvisibleWall.h"
 
 CFlyGoomba::CFlyGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = FlyGoomba_GRAVITY;
+	this->ay = FLYGOOMBA_GRAVITY;
 	die_start = -1;
-	walk_start = -1;
-	isOnPlatform = false;
+	isOnPlatform = true;
+	isFly = true;
+	vx = -FLYGOOMBA_WALKING_SPEED;
 }
 
 void CFlyGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == FlyGoomba_STATE_DIE)
+	if (state == FLYGOOMBA_STATE_DIE)
 	{
-		left = x - FlyGoomba_BBOX_WIDTH / 2;
-		top = y - FlyGoomba_BBOX_HEIGHT_DIE / 2;
-		right = left + FlyGoomba_BBOX_WIDTH;
-		bottom = top + FlyGoomba_BBOX_HEIGHT_DIE;
+		left = x - FLYGOOMBA_BBOX_WIDTH / 2;
+		top = y - FLYGOOMBA_BBOX_HEIGHT_DIE / 2;
+		right = left + FLYGOOMBA_BBOX_WIDTH;
+		bottom = top + FLYGOOMBA_BBOX_HEIGHT_DIE;
 	}
-	else if (!isOnPlatform)
+	else if (isFly)
 	{
-		left = x - FlyGoomba_FLY_BBOX_WIDTH / 2;
-		top = y - FlyGoomba_FLY_BBOX_HEIGHT / 2;
-		right = left + FlyGoomba_FLY_BBOX_WIDTH;
-		bottom = top + FlyGoomba_FLY_BBOX_HEIGHT;
+		if (isOnPlatform)
+		{
+			left = x - FLYGOOMBA_BBOX_WIDTH / 2;
+			top = y - FLYGOOMBA_BBOX_HEIGHT / 2;
+			right = left + FLYGOOMBA_BBOX_WIDTH;
+			bottom = top + FLYGOOMBA_BBOX_HEIGHT;
+		}
+		else
+		{
+			left = x - FLYGOOMBA_FLY_BBOX_WIDTH / 2;
+			top = y - FLYGOOMBA_FLY_BBOX_HEIGHT / 2;
+			right = left + FLYGOOMBA_FLY_BBOX_WIDTH;
+			bottom = top + FLYGOOMBA_FLY_BBOX_HEIGHT;
+		}
 	}
 	else
 	{
-		left = x - FlyGoomba_BBOX_WIDTH / 2;
-		top = y - FlyGoomba_BBOX_HEIGHT / 2;
-		right = left + FlyGoomba_BBOX_WIDTH;
-		bottom = top + FlyGoomba_BBOX_HEIGHT;
+		left = x - FLYGOOMBA_BBOX_WIDTH / 2;
+		top = y - FLYGOOMBA_BBOX_HEIGHT / 2;
+		right = left + FLYGOOMBA_BBOX_WIDTH;
+		bottom = top + FLYGOOMBA_BBOX_HEIGHT;
 	}
 }
 
@@ -42,9 +55,9 @@ void CFlyGoomba::OnNoCollision(DWORD dt)
 
 void CFlyGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
-
+	if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
+	//if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
+	//if (dynamic_cast<CGoomba*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -64,16 +77,15 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFly)
 	{
-		if (vy == 0)
+		if (isOnPlatform)
 		{
 			if (GetTickCount64() - walk_start > 800)
 			{
-				SetState(FlyGoomba_STATE_FLY);
+				SetState(FLYGOOMBA_STATE_FLY);
 			}
 		}
 		else
 		{
-			SetState(FlyGoomba_STATE_WALKING);
 			vy += ay * dt;
 			StartWalk();
 		}
@@ -82,13 +94,14 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vy += ay * dt;
 	}
+	//vy += ay * dt;
 	vx += ax * dt;
-	if ((state == FlyGoomba_STATE_DIE) && (GetTickCount64() - die_start > FlyGoomba_DIE_TIMEOUT))
+
+	if ((state == FLYGOOMBA_STATE_DIE) && (GetTickCount64() - die_start > FLYGOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
 	}
-	isOnPlatform = false;
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -96,31 +109,18 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFlyGoomba::Render()
 {
-	int	aniId = ID_ANI_FlyGoomba_WALKING;
+	int aniId = ID_ANI_FLYGOOMBA_WALKING;
 	if (isFly)
 	{
-		if (!isOnPlatform)
-		{
-			aniId = ID_ANI_FlyGoomba_FLY;
-		}
-		else
-		{
-			if (state == FlyGoomba_STATE_DIE)
-			{
-				aniId = ID_ANI_FlyGoomba_DIE;
-			}
-			else
-			{
-				aniId = ID_ANI_FlyGoomba_WALKING;
-			}
-		}
+		aniId = ID_ANI_FLYGOOMBA_FLY;
 	}
-	else
+	else if (state == FLYGOOMBA_STATE_DIE)
 	{
-		aniId = ID_ANI_FlyGoomba_WALKING_SMALL;
+		aniId = ID_ANI_FLYGOOMBA_DIE;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	//RenderBoundingBox();
 }
 
 void CFlyGoomba::SetState(int state)
@@ -128,19 +128,17 @@ void CFlyGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case FlyGoomba_STATE_FLY:
-		vy = -0.065f;
+	case FLYGOOMBA_STATE_FLY:
+		vy = -0.1f;
+		isOnPlatform = false;
 		break;
-	case FlyGoomba_STATE_DIE:
+	case FLYGOOMBA_STATE_DIE:
 		die_start = GetTickCount64();
-		y += (FlyGoomba_BBOX_HEIGHT - FlyGoomba_BBOX_HEIGHT_DIE) / 2;
+		y += (FLYGOOMBA_BBOX_HEIGHT - FLYGOOMBA_BBOX_HEIGHT_DIE) / 2;
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
-	case FlyGoomba_STATE_WALKING:
-		vx = -FlyGoomba_WALKING_SPEED;
-		//ay = FlyGoomba_GRAVITY;
-		break;
 	}
 }
+

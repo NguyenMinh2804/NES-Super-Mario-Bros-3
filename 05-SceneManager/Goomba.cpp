@@ -1,4 +1,6 @@
 #include "Goomba.h"
+#include "FlyGoomba.h"
+#include "InvisibleWall.h"
 
 CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 {
@@ -34,8 +36,9 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
+	//if (dynamic_cast<CGoomba*>(e->obj)) return;
+	//if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
 
 	if (e->ny != 0)
 	{
