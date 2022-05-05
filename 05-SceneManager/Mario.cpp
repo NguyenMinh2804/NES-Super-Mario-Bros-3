@@ -14,6 +14,7 @@
 #include "Leaf.h"
 #include "FlyGoomba.h"
 #include "InvisibleWall.h"
+#include "Turtle.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -79,6 +80,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CRectangle*>(e->obj))
 		OnCollisionWithRectangle(e);
+	else if (dynamic_cast<CTurtle*>(e->obj))
+		OnCollisionWithTurtle(e);
 }
 
 
@@ -125,6 +128,56 @@ void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 		{
 			brickQuestion->SetState(0);
 			brickQuestion->DropItem(level);
+		}
+	}
+}
+
+void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
+{
+	CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
+	if (turtle->GetState() == TURTLE_STATE_SHELL)
+	{
+		if (e->nx > 0)
+		{
+			turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+		}
+		else
+		{
+			turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+		}
+	}
+	else
+	{
+		if (e->ny < 0)
+		{
+			if (turtle->GetIsFly())
+			{
+				turtle->SetIsFly(false);
+			}
+			else
+			{
+				turtle->SetState(TURTLE_STATE_SHELL);
+			}
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else
+		{
+			if (untouchable == 0)
+			{
+				if (turtle->GetState() != TURTLE_STATE_SHELL)
+				{
+					if (level > MARIO_LEVEL_SMALL)
+					{
+						level--;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+					}
+				}
+			}
 		}
 	}
 }

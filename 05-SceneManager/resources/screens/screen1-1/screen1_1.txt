@@ -14,6 +14,7 @@ resources/objects/brickQuestion.txt
 resources/objects/mushroom.txt
 resources/objects/leaf.txt
 resources/objects/flyGoomba.txt
+resources/objects/turtle.txt
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	100000
 #
@@ -34,6 +35,14 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 16	1104	384
 16	1104	368
 16	1104	352
+16	1104	336
+16	1104	320
+
+16	512	368
+16	624	368
+
+16	1168	400
+16	1552	400
 
 #BRICK_QUESTION
 12	176	352	1
@@ -268,6 +277,10 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 6	2832	416	2
 6	2848	416	3
 
+#TURTLE
+18	560	336	1	0
+18	1530	368	0	0
+18	1500	368	0	1
 #GOOMBA
 2	224	400
 2	528	400
@@ -276,4 +289,4 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 15	871	384
 
 # MARIO
-0	700	300
+0	1450	300

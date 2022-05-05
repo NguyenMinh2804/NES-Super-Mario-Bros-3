@@ -173,6 +173,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Turtle.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Wall.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Turtle.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WaterPipe.h" />
     <ClInclude Include="Wood.h" />

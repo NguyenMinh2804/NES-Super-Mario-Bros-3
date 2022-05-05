@@ -145,7 +145,6 @@ class CMario : public CGameObject
 	int gameTime;
 	ULONGLONG untouchable_start;
 	ULONGLONG game_start;
-	int coin;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -157,11 +156,13 @@ class CMario : public CGameObject
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithRectangle(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlyGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdFly();
 
 public:
+	int coin;
 	int level;
 	BOOLEAN isOnPlatform;
 	int test;

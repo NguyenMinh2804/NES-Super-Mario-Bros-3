@@ -8,6 +8,17 @@ void CCoin::Render()
 	//RenderBoundingBox();
 }
 
+void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	vy += ay * dt;
+	y += vy * dt;
+	if (GetTickCount64() - drop_start > 400)
+	{
+		this->Delete();
+	}
+	CGameObject::Update(dt, coObjects);
+}
+
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - COIN_BBOX_WIDTH / 2;

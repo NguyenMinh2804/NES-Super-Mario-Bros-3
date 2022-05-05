@@ -2,7 +2,7 @@
 
 void CInvisibleWall::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CInvisibleWall::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -42,7 +42,10 @@ void CBrickQuestion::DropItem(int marioLevel)
 	if (type == 1)
 	{
 		obj = new CCoin(x, y - 16);
+		dynamic_cast<CCoin*>(obj)->Fly();
 		currentScene->AddObject(obj);
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		mario->coin++;
 	}
 	else
 	{
@@ -56,7 +59,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 		}
 		default: 
 		{
-			obj = new CLeaf(x, y - 25);
+			obj = new CLeaf(x, y - 40);
 			currentScene->AddObject(obj);
 			break;
 		}

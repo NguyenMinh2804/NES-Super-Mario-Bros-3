@@ -22,6 +22,7 @@
 #include "FlyGoomba.h"
 #include "InvisibleWall.h"
 #include "Wall.h"
+#include "Turtle.h"
 
 using namespace std;
 
@@ -176,8 +177,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CWall(x, y);
 		break;
 	}
-
-
+	case OBJECT_TYPE_TURTLE:
+	{
+		float type = (float)atof(tokens[3].c_str());
+		float isFly = (float)atof(tokens[4].c_str());
+		obj = new CTurtle(x, y, type, isFly);
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
