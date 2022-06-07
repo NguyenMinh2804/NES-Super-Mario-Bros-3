@@ -13,8 +13,10 @@
 class CCoin : public CGameObject {
 	float ay;
 	ULONGLONG drop_start;
+	int type;
 public:
-	CCoin(float x, float y) : CGameObject(x, y) {
+	CCoin(float x, float y, int type) : CGameObject(x, y) {
+		this->type = type;
 		vy = 0;
 		ay = 0.002f;
 		drop_start = -1;

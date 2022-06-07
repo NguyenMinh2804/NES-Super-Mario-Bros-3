@@ -51,6 +51,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
+	case DIK_D:
+		if (mario->level == 3)
+		{
+			mario->SetState(MARIO_STATE_TAIL_ATTACK);
+		}		
+		break;
 	case DIK_R: // reset
 		//Reload();
 		break;

@@ -15,6 +15,8 @@
 #include "FlyGoomba.h"
 #include "InvisibleWall.h"
 #include "Turtle.h"
+#include "Tail.h"
+#include "PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -408,6 +410,18 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdFly()
 {
 	int aniId = -1;
+	if (GetTickCount64() - tail_attack < 200)
+	{
+		if(nx == 1)
+		{
+			aniId = ID_ANI_MARIO_ATTACK_RIGHT;
+		}
+		else
+		{
+			aniId = ID_ANI_MARIO_ATTACK_LEFT;
+		}
+		return aniId;
+	}
 	if (!isOnPlatform)
 	{
 		if (ay == MARIO_SLOW_GRAVITY)
@@ -591,7 +605,10 @@ void CMario::SetState(int state)
 		ay = MARIO_SLOW_GRAVITY;
 		break;
 	case MARIO_STATE_FLY:
-		vy = -MARIO_JUMP_RUN_SPEED_Y;
+		vy = -0.3f;
+		break;
+	case MARIO_STATE_TAIL_ATTACK:
+		TailAttack();
 		break;
 	}
 	CGameObject::SetState(state);
@@ -648,5 +665,14 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	level = l;
+}
+
+void CMario::TailAttack()
+{
+	tail_attack = GetTickCount64();
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	CGameObject* obj;
+	obj = new CTail(x, y, nx);
+	currentScene->AddObject(obj);
 }
 

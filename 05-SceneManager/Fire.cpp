@@ -3,6 +3,7 @@
 
 CFire::CFire(float x, float y, int direction) : CGameObject(x, y)
 {
+	attack_start = GetTickCount64();
 	this->direction = direction;
 	switch (direction)
 	{
@@ -31,7 +32,6 @@ CFire::CFire(float x, float y, int direction) : CGameObject(x, y)
 		break;
 	}
 	}
-
 	SetState(0);
 }
 
@@ -56,6 +56,10 @@ void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (GetTickCount64() - attack_start > 6000)
+	{
+		this->Delete();
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

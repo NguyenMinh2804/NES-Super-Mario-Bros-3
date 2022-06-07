@@ -39,6 +39,7 @@
 
 #define MARIO_STATE_SLOW_FALL	900
 #define MARIO_STATE_FLY	901
+#define MARIO_STATE_TAIL_ATTACK	902
 
 #pragma region ANIMATION_ID
 
@@ -108,6 +109,10 @@
 
 #define ID_ANI_MARIO_SLOW_FALL_RIGHT 2902
 #define ID_ANI_MARIO_SLOW_FALL_LEFT 2903
+
+#define ID_ANI_MARIO_ATTACK_RIGHT 2904
+#define ID_ANI_MARIO_ATTACK_LEFT 2905
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -145,6 +150,7 @@ class CMario : public CGameObject
 	int gameTime;
 	ULONGLONG untouchable_start;
 	ULONGLONG game_start;
+	ULONGLONG tail_attack;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -177,6 +183,7 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+		tail_attack = -1;
 		this->gameTime = gameTime;
 		game_start = GetTickCount64();
 		isOnPlatform = false;
@@ -200,4 +207,5 @@ public:
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 5; untouchable_start = GetTickCount64(); }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void TailAttack();
 };

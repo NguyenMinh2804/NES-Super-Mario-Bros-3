@@ -6,6 +6,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Game.h"
+#include "Tail.h"
 
 CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 {
@@ -57,6 +58,19 @@ void CTurtle::OnNoCollision(DWORD dt)
 
 void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CTail*>(e->obj))
+	{
+		if (isFly)
+		{
+			isFly = false;
+			return;
+		}
+		else
+		{
+			this->SetState(TURTLE_STATE_SHELL);
+			return;
+		}
+	}
 	if (state == TURTLE_STATE_WALKING || isFly)
 	{
 		if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;

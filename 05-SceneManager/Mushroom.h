@@ -17,6 +17,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CMushroom(float x, float y);
+	int type;
+	CMushroom(float x, float y, int type);
 	virtual void SetState(int state);
 };

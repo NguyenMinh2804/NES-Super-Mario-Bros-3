@@ -41,7 +41,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	if (type == 1)
 	{
-		obj = new CCoin(x, y - 16);
+		obj = new CCoin(x, y - 16, 1);
 		dynamic_cast<CCoin*>(obj)->Fly();
 		currentScene->AddObject(obj);
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -53,7 +53,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 		{
 		case 1:
 		{
-			obj = new CMushroom(x, y - 16);
+			obj = new CMushroom(x, y - 16, 1);
 			currentScene->AddObject(obj);
 			break;
 		}

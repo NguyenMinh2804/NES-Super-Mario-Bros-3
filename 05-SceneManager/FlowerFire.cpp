@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "fire.h"
+#include "Tail.h"
 
 void CFlowerFire::Render()
 {
@@ -70,6 +71,8 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		Down();
 		StartUp();
 	}
+	CGameObject::Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CFlowerFire::Up()
@@ -95,4 +98,17 @@ void CFlowerFire::Down()
 void CFlowerFire::SetState(int state)
 {
 	CGameObject::SetState(state);
+}
+
+void CFlowerFire::OnNoCollision(DWORD dt)
+{
+}
+
+void CFlowerFire::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CTail*>(e->obj))
+	{
+		this->Delete();
+		return;
+	}
 }

@@ -10,11 +10,14 @@ void CCoin::Render()
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	y += vy * dt;
-	if (GetTickCount64() - drop_start > 400)
+	if (type == 1)
 	{
-		this->Delete();
+		vy += ay * dt;
+		y += vy * dt;
+		if (GetTickCount64() - drop_start > 400)
+		{
+			this->Delete();
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 }

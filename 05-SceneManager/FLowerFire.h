@@ -23,4 +23,6 @@ public:
 	void SetState(int state);
 	void StartFire() {fire_start = GetTickCount64(); }
 	void StartUp() { up_start = GetTickCount64(); }
+	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 };

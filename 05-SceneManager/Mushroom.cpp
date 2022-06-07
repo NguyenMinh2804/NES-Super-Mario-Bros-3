@@ -1,7 +1,8 @@
 #include "Mushroom.h"
 
-CMushroom::CMushroom(float x, float y) :CGameObject(x, y)
+CMushroom::CMushroom(float x, float y, int type) :CGameObject(x, y)
 {
+	this->type = type;
 	this->ax = 0;
 	this->ay = 0.001f;
 	vx = 0.045f;
@@ -50,7 +51,14 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::Render()
 {
-	CSprites::GetInstance()->Get(131)->Draw(x, y);
+	if (type == 0)
+	{
+		CSprites::GetInstance()->Get(131)->Draw(x, y);
+	}
+	else
+	{
+		CSprites::GetInstance()->Get(132)->Draw(x, y);
+	}
 }
 
 void CMushroom::SetState(int state)
