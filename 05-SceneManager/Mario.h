@@ -163,6 +163,9 @@ class CMario : public CGameObject
 	void OnCollisionWithRectangle(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlyGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick2(LPCOLLISIONEVENT e);
+	void OnCollisionWithButton(LPCOLLISIONEVENT e);
+	
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdFly();

@@ -72,6 +72,10 @@ void CFlyGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
 	//if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
 	//if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CInvisibleWall*>(e->obj))
+	{
+		vx = -vx;
+	}
 	if (e->ny != 0)
 	{
 		vy = 0;

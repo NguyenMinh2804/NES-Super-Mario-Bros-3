@@ -3,6 +3,7 @@
 #include "Goomba.h"
 #include "FlyGoomba.h"
 #include "BrickQuestion.h"
+#include "Brick2.h"
 #include "Mario.h"
 #include "PlayScene.h"
 #include "Game.h"
@@ -71,7 +72,7 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			return;
 		}
 	}
-	if (state == TURTLE_STATE_WALKING || isFly)
+	if (state == TURTLE_STATE_WALKING || state == TURTLE_STATE_FLY)
 	{
 		if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
 	}
@@ -92,10 +93,14 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			brickQuestion->SetState(0);
 			brickQuestion->DropItem(mario->level);
 		}
+		else if (dynamic_cast<CBrick2*>(e->obj))
+		{
+			CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
+			brick->DropItem();
+		}
 	}
 	//if (dynamic_cast<CTurtle*>(e->obj)) return;
 	//if (dynamic_cast<CFlyTurtle*>(e->obj)) return;
-
 	if (e->ny != 0)
 	{
 		vy = 0;

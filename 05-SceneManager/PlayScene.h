@@ -16,7 +16,6 @@ protected:
 	Map* map = NULL;
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;					
-	vector<LPGAMEOBJECT> objects;
 	int gameTime;
 	void _ParseSection_MAPS(string line);
 	void _ParseSection_SPRITES(string line);
@@ -29,7 +28,7 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
-
+	vector<LPGAMEOBJECT> objects;
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

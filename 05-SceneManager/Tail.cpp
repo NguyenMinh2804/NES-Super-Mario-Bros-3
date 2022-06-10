@@ -4,7 +4,11 @@
 #include "FlyGoomba.h"
 #include "FLowerFire.h"
 #include "Turtle.h"
-
+#include "BrickQuestion.h"
+#include "Mario.h"
+#include "PlayScene.h"
+#include "Game.h"
+#include "Brick2.h"
 void CTail::Render()
 {
 	//RenderBoundingBox();
@@ -12,9 +16,9 @@ void CTail::Render()
 
 void CTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 20 / 2;
+	l = x - 25 / 2;
 	t = y - 4 / 2;
-	r = l + 20;
+	r = l + 25;
 	b = t + 4;
 }
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -38,5 +42,18 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CFlyGoomba*>(e->obj))
 	{
 		e->obj->Delete();
+	}
+	else if (dynamic_cast<CGoomba*>(e->obj))
+	{
+		e->obj->Delete();
+	}
+	else if (dynamic_cast<CFlowerFire*>(e->obj))
+	{
+		e->obj->Delete();
+	}
+	else if (dynamic_cast<CBrick2*>(e->obj))
+	{
+		CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
+		brick->DropItem();
 	}
 }

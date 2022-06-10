@@ -53,7 +53,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 		{
 		case 1:
 		{
-			obj = new CMushroom(x, y - 16, 1);
+			obj = new CMushroom(x, y - 16, 0);
 			currentScene->AddObject(obj);
 			break;
 		}

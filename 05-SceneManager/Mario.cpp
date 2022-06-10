@@ -16,7 +16,9 @@
 #include "InvisibleWall.h"
 #include "Turtle.h"
 #include "Tail.h"
+#include "Brick2.h"
 #include "PlayScene.h"
+#include "Button.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -72,6 +74,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFlowerFire(e);
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
 		OnCollisionWithBrickQuestion(e);
+	else if (dynamic_cast<CBrick2*>(e->obj))
+		OnCollisionWithBrick2(e);
 	else if (dynamic_cast<CFire*>(e->obj))
 		OnCollisionWithFire(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -84,6 +88,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRectangle(e);
 	else if (dynamic_cast<CTurtle*>(e->obj))
 		OnCollisionWithTurtle(e);
+	else if (dynamic_cast<CButton*>(e->obj))
+		OnCollisionWithButton(e);
 }
 
 
@@ -132,6 +138,21 @@ void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 			brickQuestion->DropItem(level);
 		}
 	}
+}
+
+void CMario::OnCollisionWithBrick2(LPCOLLISIONEVENT e)
+{
+	CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
+	if (e->ny > 0)
+	{
+		brick->DropItem();
+	}
+}
+
+void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
+{
+	CButton* button = dynamic_cast<CButton*>(e->obj);
+	button->Trigger();
 }
 
 void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)

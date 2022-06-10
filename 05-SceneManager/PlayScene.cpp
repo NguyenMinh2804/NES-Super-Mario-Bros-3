@@ -16,6 +16,7 @@
 #include "FlowerFire.h"
 #include "Fire.h"
 #include "BrickQuestion.h"
+#include "Brick2.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
 #include "Mushroom.h"
@@ -129,6 +130,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_FLYGOOMBA: obj = new CFlyGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_BRICK2: 
+	{
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CBrick2(x, y, type); break;
+	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, 0); break;
 	case OBJECT_TYPE_GROUND:
 	{
@@ -152,7 +158,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_FLOWER_FIRE:
 	{
-		obj = new CFlowerFire(x, y); break;
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CFlowerFire(x, y, type); break;
 	}
 	case OBJECT_TYPE_BRICK_QUESTION:
 	{

@@ -10,32 +10,53 @@ void CFlowerFire::Render()
 	float cx, cy;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	mario->GetPosition(cx, cy);
-	if (cx < x)
+	int ani1, ani2;
+
+	if (type == 3)
 	{
-		if (cy < 320)
-		{
-			CSprites::GetInstance()->Get(102)->Draw(x, y);
-			direction = 2;
-		}
-		else
-		{
-			CSprites::GetInstance()->Get(101)->Draw(x, y);
-			direction = 1;
-		}
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(107)->Render(x, y);
 	}
 	else
 	{
-		if (cy < 320)
+		if (type == 1)
 		{
-			CSprites::GetInstance()->Get(102)->Draw(x, y);
-			direction = 3;
+			ani1 = 101;
+			ani2 = 102;
 		}
 		else
 		{
-			CSprites::GetInstance()->Get(101)->Draw(x, y);
-			direction = 4;
+			ani1 = 103;
+			ani2 = 104;
+		}
+		if (cx < x)
+		{
+			if (cy < 320)
+			{
+				CSprites::GetInstance()->Get(ani2)->Draw(x, y);
+				direction = 2;
+			}
+			else
+			{
+				CSprites::GetInstance()->Get(ani1)->Draw(x, y);
+				direction = 1;
+			}
+		}
+		else
+		{
+			if (cy < 320)
+			{
+				CSprites::GetInstance()->Get(ani2)->Draw(x, y);
+				direction = 3;
+			}
+			else
+			{
+				CSprites::GetInstance()->Get(ani1)->Draw(x, y);
+				direction = 4;
+			}
 		}
 	}
+
 }
 
 void CFlowerFire::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -58,13 +79,25 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else if (state == 1)
 	{
-		if (GetTickCount64() - fire_start > 1000)
+		if (type != 3)
 		{
-			CGameObject* obj = new CFire(x, y - 8, direction);
-			CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-			currentScene->AddObject(obj);
-			SetState(2);
+			if (GetTickCount64() - fire_start > 1000)
+			{
+					CGameObject* obj = new CFire(x, y - 8, direction);
+					CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+					currentScene->AddObject(obj);
+				SetState(2);
+			}
 		}
+		else
+		{
+			if (GetTickCount64() - fire_start > 500)
+			{
+				SetState(2);
+			}
+		
+		}
+			
 	}
 	else
 	{
@@ -77,7 +110,7 @@ void CFlowerFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFlowerFire::Up()
 {
-	if (y > startY - 31)
+	if (y > startY - height)
 	{
 		y = y - 0.8;
 		return;
@@ -87,7 +120,7 @@ void CFlowerFire::Up()
 
 void CFlowerFire::Down()
 {
-	if (y < startY + 31)
+	if (y < startY + height)
 	{
 		y = y + 0.8;
 		return;
