@@ -4,17 +4,16 @@ void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_COIN)->Render(x, y);
-
 	//RenderBoundingBox();
 }
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (type == 1)
+	if (type == FLY_COIN)
 	{
 		vy += ay * dt;
 		y += vy * dt;
-		if (GetTickCount64() - drop_start > 400)
+		if (GetTickCount64() - drop_start > FLY_COIN_TIME)
 		{
 			this->Delete();
 		}

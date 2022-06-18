@@ -179,11 +179,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInvisibleWall(x, y);
 		break;
 	}
-	//case OBJECT_TYPE_WALL:
-	//{
-	//	obj = new CWall(x, y);
-	//	break;
-	//}
+	case OBJECT_TYPE_WALL:
+	{
+		obj = new CWall(x, y);
+		break;
+	}
 	case OBJECT_TYPE_TURTLE:
 	{
 		float type = (float)atof(tokens[3].c_str());

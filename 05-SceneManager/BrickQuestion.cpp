@@ -3,27 +3,26 @@
 #include "PlayScene.h"
 #include "Coin.h"
 #include "Leaf.h"
-#include "Tail.h"
 
 void CBrickQuestion::Render()
 {
-	if (state == 0)
+	if (state == BRICK_QUESTION_STATE_BROKEN)
 	{
-		CSprites::GetInstance()->Get(125)->Draw(x, y);
+		CSprites::GetInstance()->Get(ID_ANI_BRICK_QUESTION_BROKEN)->Draw(x, y);
 	}
 	else
 	{
 		CAnimations* animations = CAnimations::GetInstance();
-		animations->Get(120)->Render(x, y);
+		animations->Get(ID_ANI_BRICK_QUESTION)->Render(x, y);
 	}
 }
 
 void CBrickQuestion::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 16 / 2;
-	t = y - 16 / 2;
-	r = l + 16;
-	b = t + 16;
+	l = x - BRICK_QUESTION_BBOX_WIDTH / 2;
+	t = y - BRICK_QUESTION_BBOX_HEIGHT / 2;
+	r = l + BRICK_QUESTION_BBOX_WIDTH;
+	b = t + BRICK_QUESTION_BBOX_HEIGHT;
 }
 
 void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -40,7 +39,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 {
 	CGameObject* obj;
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	if (type == 1)
+	if (type == HAVE_ITEM)
 	{
 		obj = new CCoin(x, y - 16, 1);
 		dynamic_cast<CCoin*>(obj)->Fly();
@@ -52,7 +51,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 	{
 		switch (marioLevel)
 		{
-		case 1:
+		case MARIO_LEVEL_SMALL:
 		{
 			obj = new CMushroom(x, y - 16, 0);
 			currentScene->AddObject(obj);
@@ -70,15 +69,4 @@ void CBrickQuestion::DropItem(int marioLevel)
 
 void CBrickQuestion::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		if (this->GetState() != 0)
-		{
-			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-			this->SetState(0);
-			this->DropItem(mario->level);
-		}
-	}
-
 }

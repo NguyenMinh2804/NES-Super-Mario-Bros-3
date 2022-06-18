@@ -592,7 +592,7 @@ void CMario::SetState(int state)
 		maxVx = MARIO_RUNNING_SPEED;
 		if (ax < MARIO_ACCEL_RUN_X && !isFlying)
 		{
-			ax += 0.00001f;
+			ax += MARIO_RUN;
 		}
 		else
 		{
@@ -605,7 +605,7 @@ void CMario::SetState(int state)
 		maxVx = -MARIO_RUNNING_SPEED;
 		if (ax > -MARIO_ACCEL_RUN_X && !isFlying)
 		{
-			ax -= 0.00001f;
+			ax -= MARIO_RUN;
 		}
 		else
 		{
@@ -677,7 +677,7 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_FLY:
 		isFlying = true;
-		vy = -0.3f;
+		vy = -MARIO_FLY_SPEED_Y;
 		break;
 	case MARIO_STATE_TAIL_ATTACK:
 		TailAttack();

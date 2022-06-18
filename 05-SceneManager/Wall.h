@@ -1,6 +1,7 @@
-#pragma once
 #include "GameObject.h"
 
+#define WALL_BBOX_WIDTH 16
+#define WALL_BBOX_HEIGHT 16
 class CWall : public CGameObject {
 public:
 	CWall(float x, float y)

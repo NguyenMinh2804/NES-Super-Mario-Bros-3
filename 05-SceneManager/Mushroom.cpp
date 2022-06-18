@@ -4,17 +4,16 @@ CMushroom::CMushroom(float x, float y, int type) :CGameObject(x, y)
 {
 	this->type = type;
 	this->ax = 0;
-	this->ay = 0.001f;
-	vx = 0.045f;
-	SetState(0);
+	this->ay = MUSHROOM_GRAVITY;
+	vx = MUSHROOM_SPEED;
 }
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 16 / 2;
-	top = y - 16 / 2;
-	right = left + 16;
-	bottom = top + 15;
+	left = x - MUSHROOM_BBOX_WIDTH / 2;
+	top = y - MUSHROOM_BBOX_HEIGHT / 2;
+	right = left + MUSHROOM_BBOX_WIDTH;
+	bottom = top + MUSHROOM_BBOX_HEIGHT;
 }
 
 void CMushroom::OnNoCollision(DWORD dt)
@@ -51,13 +50,13 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::Render()
 {
-	if (type == 0)
+	if (type == TYPE_MUSHROOM_RED)
 	{
-		CSprites::GetInstance()->Get(131)->Draw(x, y);
+		CSprites::GetInstance()->Get(ID_ANI_MUSHROOM_RED)->Draw(x, y);
 	}
 	else
 	{
-		CSprites::GetInstance()->Get(132)->Draw(x, y);
+		CSprites::GetInstance()->Get(ID_ANI_MUSHROOM_GREEN)->Draw(x, y);
 	}
 }
 

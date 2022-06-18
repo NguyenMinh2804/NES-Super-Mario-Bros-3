@@ -22,17 +22,17 @@ CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 	this->isRed = isRed;
 	if (isRed)
 	{
-		ID_ANI_TURTLE_WALKING_LEFT = 1801;
-		ID_ANI_TURTLE_WALKING_RIGHT = 1808;
-		ID_ANI_TURTLE_SHELL = 1802;
-		ID_ANI_TURTLE_ATTACK = 1803;
+		ID_ANI_TURTLE_WALKING_LEFT = ID_ANI_TURTLE_RED_WALKING_LEFT;
+		ID_ANI_TURTLE_WALKING_RIGHT = ID_ANI_TURTLE_RED_WALKING_RIGHT
+		ID_ANI_TURTLE_SHELL = ID_ANI_TURTLE_RED_SHELL;
+		ID_ANI_TURTLE_ATTACK = ID_ANI_TURTLE_RED_ATTACK;
 	}
 	else
 	{
-		ID_ANI_TURTLE_WALKING_LEFT = 1804;
-		ID_ANI_TURTLE_WALKING_RIGHT = 1809;
-		ID_ANI_TURTLE_SHELL = 1805;
-		ID_ANI_TURTLE_ATTACK = 1806;
+		ID_ANI_TURTLE_WALKING_LEFT = ID_ANI_TURTLE_GREEN_WALKING_LEFT;
+		ID_ANI_TURTLE_WALKING_RIGHT = ID_ANI_TURTLE_GREEN_WALKING_RIGHT;
+		ID_ANI_TURTLE_SHELL = ID_ANI_TURTLE_GREEN_SHELL;
+		ID_ANI_TURTLE_ATTACK = ID_ANI_TURTLE_GREEN_ATTACK;
 	}
 
 }
@@ -95,8 +95,11 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
-			brickQuestion->SetState(0);
-			brickQuestion->DropItem(mario->level);
+			if (brickQuestion->GetState() != BRICK_QUESTION_STATE_BROKEN)
+			{
+				brickQuestion->SetState(BRICK_QUESTION_STATE_BROKEN);
+				brickQuestion->DropItem(mario->level);
+			}
 		}
 		else if (dynamic_cast<CBrick2*>(e->obj))
 		{
@@ -207,11 +210,11 @@ void CTurtle::Render()
 	{
 		if (vx > 0)
 		{
-			aniId = 1810;
+			aniId = ID_ANI_TURTLE_FLY_RIGHT;
 		}
 		else
 		{
-			aniId = ID_ANI_TURTLE_FLY;
+			aniId = ID_ANI_TURTLE_FLY_LEFT;
 		}
 	}
 	else
@@ -239,11 +242,11 @@ void CTurtle::SetState(int state)
 		vx = 0;
 		break;
 	case TURTLE_STATE_SHELL_ACTTACK_RIGHT:
-		vx = 0.22f;
+		vx = TURTLE_ATTACK_SPEED;
 		attack_start = GetTickCount64();
 		break;
 	case TURTLE_STATE_SHELL_ACTTACK_LEFT:
-		vx = -0.22f;
+		vx = -TURTLE_ATTACK_SPEED;
 		attack_start = GetTickCount64();
 		break;
 	case TURTLE_STATE_WALKING:
@@ -251,8 +254,8 @@ void CTurtle::SetState(int state)
 		ay = TURTLE_GRAVITY;
 		break;
 	case TURTLE_STATE_FLY:
-		ay = 0.0002;
-		vy = -0.27f;
+		ay = TURTLE_FLY_GRAVITY;
+		vy = -TURTLE_FLY_SPEED;
 		break;
 	}
 }

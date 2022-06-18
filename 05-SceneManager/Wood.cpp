@@ -3,13 +3,13 @@
 
 void CWood::Render()
 {	
-	CSprites::GetInstance()->Get(81)->Draw(x, y);
+	CSprites::GetInstance()->Get(ID_ANI_WOOD)->Draw(x, y);
 }
 
 void CWood::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 16 / 2;
-	t = y - 16 / 2;
-	r = l + 16;
-	b = t + 16;
+	l = x - WOOD_BBOX_WIDTH / 2;
+	t = y - WOOD_BBOX_HEIGHT / 2;
+	r = l + WOOD_BBOX_WIDTH;
+	b = t + WOOD_BBOX_HEIGHT;
 }

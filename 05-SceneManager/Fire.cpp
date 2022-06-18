@@ -7,40 +7,39 @@ CFire::CFire(float x, float y, int direction) : CGameObject(x, y)
 	this->direction = direction;
 	switch (direction)
 	{
-	case 1:
+	case FIRE_UP_LEFT:
 	{
-		vx = -0.055f;
-		vy = 0.02f;
+		vx = -SPEED_X;
+		vy = SPEED_Y;
 		break;
 	}
-	case 2:
+	case FIRE_DOWN_LEFT:
 	{
-		vx = -0.055f;
-		vy = -0.02f;
+		vx = -SPEED_X;
+		vy = -SPEED_Y;
 		break;
 	}
-	case 3:
+	case FIRE_UP_RIGHT:
 	{
-		vx = 0.055f;
-		vy = -0.02f;
+		vx = SPEED_X;
+		vy = -SPEED_Y;
 		break;
 	}
-	case 4:
+	case FIRE_DOWN_RIGHT:
 	{
-		vx = 0.055f;
-		vy = 0.02f;
+		vx = SPEED_X;
+		vy = SPEED_Y;
 		break;
 	}
 	}
-	SetState(0);
 }
 
 void CFire::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - 8 / 2;
-	top = y - 8 / 2;
-	right = left + 8;
-	bottom = top + 8;
+	left = x - FIRE_BBOX_WIDTH / 2;
+	top = y - FIRE_BBOX_HEIGHT / 2;
+	right = left + FIRE_BBOX_WIDTH;
+	bottom = top + FIRE_BBOX_HEIGHT;
 }
 
 void CFire::OnNoCollision(DWORD dt)
@@ -56,7 +55,7 @@ void CFire::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (GetTickCount64() - attack_start > 6000)
+	if (GetTickCount64() - attack_start > FIRE_TIME)
 	{
 		this->Delete();
 	}
@@ -68,7 +67,7 @@ void CFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CFire::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(110)->Render(x, y);
+	animations->Get(ID_ANI_FIRE)->Render(x, y);
 }
 
 void CFire::SetState(int state)

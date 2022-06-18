@@ -1,6 +1,12 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
+
+#define ID_ANI_BRICK2 190
+#define BRICK2_BBOX_WIDTH 16
+#define BRICK2_BBOX_HEIGHT 16
+#define HAVE_ITEM 1
+
 class CBrick2 : public CGameObject {
 public:
 	int type;

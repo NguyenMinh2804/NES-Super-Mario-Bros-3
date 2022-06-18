@@ -21,6 +21,9 @@
 #define ID_ANI_FLYGOOMBA_WALKING 15101
 #define ID_ANI_FLYGOOMBA_FLY 15102
 #define ID_ANI_FLYGOOMBA_DIE 15103
+#define DISTANCE_TO_FOLLOW 80
+#define WALK_TIME 800
+#define FLY_SPEED 0.1f
 
 class CFlyGoomba : public CGameObject
 {

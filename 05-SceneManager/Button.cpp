@@ -7,15 +7,15 @@
 void CButton::Render()
 {
 
-	CSprites::GetInstance()->Get(201)->Draw(x, y);
+	CSprites::GetInstance()->Get(ID_ANI_BUTTON)->Draw(x, y);
 }
 
 void CButton::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 16 / 2;
-	t = y - 16 / 2;
-	r = l + 16;
-	b = t + 16;
+	l = x - BUTTON_BBOX_WIDTH / 2;
+	t = y - BUTTON_BBOX_HEIGHT / 2;
+	r = l + BUTTON_BBOX_WIDTH;
+	b = t + BUTTON_BBOX_HEIGHT;
 }
 
 void CButton::Trigger()
@@ -28,8 +28,8 @@ void CButton::Trigger()
 		if (dynamic_cast<CBrick2*>(obj))
 		{
 			obj->Delete();
-			CGameObject* obj2 = new CCoin(obj->x, obj->y, 0);
-			currentScene->AddObject(obj2);
+			CGameObject* coin = new CCoin(obj->x, obj->y, 0);
+			currentScene->AddObject(coin);
 		}
 	}
 	this->Delete();

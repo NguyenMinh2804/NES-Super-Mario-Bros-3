@@ -1,5 +1,10 @@
 #include "GameObject.h"
 
+#define TAIL_BBOX_WIDTH 14
+#define TAIL_BBOX_HEIGHT 4
+#define TAIL_ATTACK_TIME 230
+#define TAIL_ATTACK_SPEED 0.05f
+
 class CTail : public CGameObject {
 	ULONGLONG attack_start;
 	int nx;
@@ -9,11 +14,11 @@ public:
 		this->nx = nx;
 		if (nx == 1)
 		{
-			vx = 0.05f;
+			vx = TAIL_ATTACK_SPEED;
 		}
 		else
 		{
-			vx = -0.05f;
+			vx = -TAIL_ATTACK_SPEED;
 		}
 		this->x = x;
 		this->y = y + 5;

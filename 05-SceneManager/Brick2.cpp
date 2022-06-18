@@ -9,15 +9,15 @@
 void CBrick2::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(190)->Render(x, y);
+	animations->Get(ID_ANI_BRICK2)->Render(x, y);
 }
 
 void CBrick2::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 16 / 2;
-	t = y - 16 / 2;
-	r = l + 16;
-	b = t + 16;
+	l = x - BRICK2_BBOX_WIDTH / 2;
+	t = y - BRICK2_BBOX_HEIGHT / 2;
+	r = l + BRICK2_BBOX_WIDTH;
+	b = t + BRICK2_BBOX_HEIGHT;
 }
 
 void CBrick2::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -35,7 +35,7 @@ void CBrick2::DropItem()
 	CGameObject* obj;
 	CGameObject* obj2;
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	if (type == 1)
+	if (type == HAVE_ITEM)
 	{
 		obj = new CButton(x, y - 16);
 		obj2 = new CBrickQuestion(x, y, 1);

@@ -1,6 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
+#define ID_ANI_LEAF 141
+#define LEAF_BBOX_WIDTH 14
+#define LEAF_BBOX_HEIGHT 16
+#define LEAF_GRAVITY_X	0.00008f
+#define LEAF_GRAVITY_Y	0.00002f
+#define MAX_SPEED_RIGHT	0.04
+#define MAX_SPEED_LEFT	0.05
+
 class CLeaf : public CGameObject
 {
 protected:

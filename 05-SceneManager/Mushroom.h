@@ -1,4 +1,11 @@
 #include "GameObject.h"
+#define ID_ANI_MUSHROOM_RED 131
+#define ID_ANI_MUSHROOM_GREEN 132
+#define MUSHROOM_BBOX_WIDTH 16
+#define MUSHROOM_BBOX_HEIGHT 16
+#define TYPE_MUSHROOM_RED 0
+#define MUSHROOM_GRAVITY 0.001f
+#define MUSHROOM_SPEED 0.045f
 
 class CMushroom : public CGameObject
 {

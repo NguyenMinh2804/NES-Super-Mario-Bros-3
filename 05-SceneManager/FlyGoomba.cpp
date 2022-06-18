@@ -83,7 +83,7 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float cx, cy;
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		mario->GetPosition(cx, cy);
-		if (abs(cx - x) < 80)
+		if (abs(cx - x) < DISTANCE_TO_FOLLOW)
 		{
 			if (cx > x)
 			{
@@ -96,7 +96,7 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (isOnPlatform)
 		{
-			if (GetTickCount64() - walk_start > 800)
+			if (GetTickCount64() - walk_start > WALK_TIME)
 			{
 				SetState(FLYGOOMBA_STATE_FLY);
 			}
@@ -146,7 +146,7 @@ void CFlyGoomba::SetState(int state)
 	switch (state)
 	{
 	case FLYGOOMBA_STATE_FLY:
-		vy = -0.1f;
+		vy = -FLY_SPEED;
 		isOnPlatform = false;
 		break;
 	case FLYGOOMBA_STATE_DIE:
