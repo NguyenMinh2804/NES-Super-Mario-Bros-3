@@ -21,15 +21,15 @@ protected:
 
 
 	float vx;
-	float vy;
 
-	int nx;	 
 
 	int state;
 
 	bool isDeleted; 
 
 public: 
+	float vy;
+	int nx;
 	float x;
 	float y;
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }

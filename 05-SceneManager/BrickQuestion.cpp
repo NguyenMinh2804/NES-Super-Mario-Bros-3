@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "Coin.h"
 #include "Leaf.h"
+#include "Tail.h"
 
 void CBrickQuestion::Render()
 {
@@ -65,4 +66,19 @@ void CBrickQuestion::DropItem(int marioLevel)
 		}
 		}
 	}
+}
+
+void CBrickQuestion::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CTail*>(e->obj))
+	{
+		if (this->GetState() != 0)
+		{
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+			this->SetState(0);
+			this->DropItem(mario->level);
+		}
+	}
+
 }

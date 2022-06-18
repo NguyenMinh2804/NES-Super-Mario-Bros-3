@@ -51,7 +51,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
-	case DIK_D:
+	case DIK_A:
 		if (mario->level == 3)
 		{
 			mario->SetState(MARIO_STATE_TAIL_ATTACK);
@@ -73,6 +73,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;
+	case DIK_A:
+		mario->isPickUp = false;
+		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
@@ -87,16 +90,43 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
+		{
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			mario->isPickUp = true;
+		}
 		else
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		{
+			if (mario->isFlying)
+			{
+				//mario->ax = MARIO_ACCEL_RUN_X;
+				//mario->nx = 1;
+				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			}
+			else
+			{
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			}
+			//mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
 		if (game->IsKeyDown(DIK_A))
+		{
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			mario->isPickUp = true;
+		}
 		else
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		{
+			if (mario->isFlying)
+			{
+				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			}
+			else
+			{
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
+			}
+		}
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);

@@ -134,9 +134,9 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
-#define MARIO_FLY_BBOX_WIDTH  14
+#define MARIO_FLY_BBOX_WIDTH  15
 #define MARIO_FLY_BBOX_HEIGHT 24
-#define MARIO_FLY_SITTING_BBOX_WIDTH  14
+#define MARIO_FLY_SITTING_BBOX_WIDTH  15
 #define MARIO_FLY_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
@@ -151,7 +151,10 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG game_start;
 	ULONGLONG tail_attack;
-
+	ULONGLONG fly_time;
+	BOOLEAN isHaveFlyGoomba = false;
+	BOOLEAN isHaveTurtle = false;
+	
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -173,9 +176,12 @@ class CMario : public CGameObject
 public:
 	int coin;
 	int level;
+	bool isPickUp = false;
 	BOOLEAN isOnPlatform;
 	int test;
 	float ax;
+	bool isFlying = false;
+	bool iAllowFlying = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -187,6 +193,7 @@ public:
 		untouchable = 0;
 		untouchable_start = -1;
 		tail_attack = -1;
+		fly_time = -1;
 		this->gameTime = gameTime;
 		game_start = GetTickCount64();
 		isOnPlatform = false;

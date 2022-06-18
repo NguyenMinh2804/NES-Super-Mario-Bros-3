@@ -9,7 +9,7 @@
 #define TURTLE_BBOX_HEIGHT 24
 #define TURTLE_BBOX_HEIGHT_SHELL 14
 
-#define TURTLE_SHELL_TIMEOUT 6000
+#define TURTLE_SHELL_TIMEOUT 7000
 
 
 #define TURTLE_STATE_WALKING 100
@@ -22,7 +22,7 @@
 class CTurtle : public CGameObject
 {
 protected:
-	int ID_ANI_TURTLE_WALKING, ID_ANI_TURTLE_SHELL, ID_ANI_TURTLE_ATTACK;
+	int ID_ANI_TURTLE_WALKING_LEFT, ID_ANI_TURTLE_WALKING_RIGHT, ID_ANI_TURTLE_SHELL, ID_ANI_TURTLE_ATTACK;
 	float ax;
 	float ay;
 	bool isRed;
@@ -40,6 +40,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
+	bool isPickUp = false;
 	CTurtle(float x, float y, bool isRed, bool isFly);
 	virtual void SetState(int state);
 	bool GetIsFly() { return isFly; };

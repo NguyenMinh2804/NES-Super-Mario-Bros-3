@@ -2,7 +2,9 @@
 #include "Goomba.h"
 #include "InvisibleWall.h"
 #include "Tail.h"
-
+#include "Mario.h"
+#include "PlayScene.h"
+#include "Game.h"
 CFlyGoomba::CFlyGoomba(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -56,26 +58,9 @@ void CFlyGoomba::OnNoCollision(DWORD dt)
 
 void CFlyGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		if (isFly)
-		{
-			isFly = false;
-			return;
-		}
-		else
-		{
-			this->Delete();
-			return;
-		}
-	}
-	if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
-	//if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
-	//if (dynamic_cast<CGoomba*>(e->obj)) return;
-	if (dynamic_cast<CInvisibleWall*>(e->obj))
-	{
-		vx = -vx;
-	}
+	if (!e->obj->IsBlocking()) return;
+	if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -95,6 +80,20 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFly)
 	{
+		float cx, cy;
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		mario->GetPosition(cx, cy);
+		if (abs(cx - x) < 80)
+		{
+			if (cx > x)
+			{
+				vx = FLYGOOMBA_WALKING_SPEED;
+			}
+			else
+			{
+				vx = -FLYGOOMBA_WALKING_SPEED;
+			}
+		}
 		if (isOnPlatform)
 		{
 			if (GetTickCount64() - walk_start > 800)

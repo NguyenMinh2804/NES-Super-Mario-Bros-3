@@ -22,6 +22,23 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	if (int(x) > 1200 && int(x) < 1250 && isHaveTurtle == false)
+	{
+		CGameObject* obj1 = new CTurtle(1344, 250, 0, 1);
+		CGameObject* obj2 = new CTurtle(1392, 250, 0, 1);
+		CGameObject* obj3 = new CTurtle(1440, 250, 0, 1);
+		currentScene->AddObject(obj1);
+		currentScene->AddObject(obj2);
+		currentScene->AddObject(obj3);
+		isHaveTurtle = true;
+	}
+	if (int(x) > 700 && int(x) < 750 && isHaveFlyGoomba == false)
+	{
+		CGameObject* obj3 = new CFlyGoomba(871, 384);
+		currentScene->AddObject(obj3);
+		isHaveFlyGoomba = true;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -54,6 +71,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			isOnPlatform = true;
 			vy = 0;
+			isFlying = false;
 		}
 	}
 	else
@@ -160,13 +178,31 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 	CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
 	if (turtle->GetState() == TURTLE_STATE_SHELL)
 	{
-		if (e->nx > 0)
+		if (isPickUp)
 		{
-			turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+			turtle->isPickUp = true;
 		}
 		else
 		{
-			turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+			if (e->nx > 0)
+			{
+				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+			}
+			else
+			{
+				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+			}
+			if (e->ny < 0)
+			{
+				if (x + 4 > turtle->x + 8)
+				{
+					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				}
+				else
+				{
+					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+				}
+			}
 		}
 	}
 	else
@@ -422,7 +458,6 @@ int CMario::GetAniIdBig()
 				else
 					aniId = ID_ANI_MARIO_WALKING_LEFT;
 			}
-
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 
 	return aniId;
@@ -431,9 +466,9 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdFly()
 {
 	int aniId = -1;
-	if (GetTickCount64() - tail_attack < 200)
+	if (GetTickCount64() - tail_attack < 230)
 	{
-		if(nx == 1)
+		if (nx == 1)
 		{
 			aniId = ID_ANI_MARIO_ATTACK_RIGHT;
 		}
@@ -456,6 +491,7 @@ int CMario::GetAniIdFly()
 		{
 			if (abs(ax) == MARIO_ACCEL_RUN_X)
 			{
+
 				if (nx >= 0)
 					aniId = ID_ANI_MARIO_JUMP_FLY_RUN_RIGHT;
 				else
@@ -463,10 +499,25 @@ int CMario::GetAniIdFly()
 			}
 			else
 			{
-				if (nx >= 0)
-					aniId = ID_ANI_MARIO_JUMP_FLY_WALK_RIGHT;
+				if (vy >= 0)
+				{
+					if (nx >= 0)
+					{
+						aniId = 2906;
+					}
+					else
+					{
+						aniId = 2907;
+					}
+				}
 				else
-					aniId = ID_ANI_MARIO_JUMP_FLY_WALK_LEFT;
+				{
+					if (nx >= 0)
+						aniId = ID_ANI_MARIO_JUMP_FLY_WALK_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_JUMP_FLY_WALK_LEFT;
+				}
+
 			}
 		}
 	}
@@ -526,7 +577,7 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 
-	DebugOutTitle(L"Coins: %d    -    Game Time: %d", coin, (gameTime - (GetTickCount64() - game_start)) / 1000);
+	DebugOutTitle(L"Coins: %d    -    Game Time: %d", state, (gameTime - (GetTickCount64() - game_start)) / 1000);
 }
 
 void CMario::SetState(int state)
@@ -539,9 +590,9 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		if (ax < MARIO_ACCEL_RUN_X)
+		if (ax < MARIO_ACCEL_RUN_X && !isFlying)
 		{
-			ax += 0.000007f;
+			ax += 0.00001f;
 		}
 		else
 		{
@@ -552,15 +603,14 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		if (ax > -MARIO_ACCEL_RUN_X)
+		if (ax > -MARIO_ACCEL_RUN_X && !isFlying)
 		{
-			ax -= 0.000007f;
+			ax -= 0.00001f;
 		}
 		else
 		{
 			ax = -MARIO_ACCEL_RUN_X;
 		}
-		test++;
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
@@ -626,6 +676,7 @@ void CMario::SetState(int state)
 		ay = MARIO_SLOW_GRAVITY;
 		break;
 	case MARIO_STATE_FLY:
+		isFlying = true;
 		vy = -0.3f;
 		break;
 	case MARIO_STATE_TAIL_ATTACK:

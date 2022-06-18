@@ -35,11 +35,8 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 17	0	288
 
 #InvisibleWall
+16	1100	384
 16	1104	384
-16	1104	368
-16	1104	352
-16	1104	336
-16	1104	320
 
 16	512	368
 16	624	368
@@ -47,7 +44,7 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 16	1168	400
 16	1552	400
 16	2130	368
-16	2160	368
+16	2158	368
 
 #BRICK_QUESTION
 12	176	352	1
@@ -346,9 +343,6 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 #TURTLE
 18	560	336	1	0
 18	1530	368	0	0
-18	1500	368	0	1
-18	1468	368	0	1
-18	1436	368	0	1
 18	2140	352	1	0
 
 #GOOMBA
@@ -356,7 +350,6 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 2	528	400
 2	823	384
 2	855	384
-15	871	384
 
 # MARIO
-0	2170	300
+0	100	300

@@ -8,6 +8,8 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "Tail.h"
+#include "Coin.h"
+#include "FLowerFire.h"
 
 CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 {
@@ -20,13 +22,15 @@ CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 	this->isRed = isRed;
 	if (isRed)
 	{
-		ID_ANI_TURTLE_WALKING = 1801;
+		ID_ANI_TURTLE_WALKING_LEFT = 1801;
+		ID_ANI_TURTLE_WALKING_RIGHT = 1808;
 		ID_ANI_TURTLE_SHELL = 1802;
 		ID_ANI_TURTLE_ATTACK = 1803;
 	}
 	else
 	{
-		ID_ANI_TURTLE_WALKING = 1804;
+		ID_ANI_TURTLE_WALKING_LEFT = 1804;
+		ID_ANI_TURTLE_WALKING_RIGHT = 1809;
 		ID_ANI_TURTLE_SHELL = 1805;
 		ID_ANI_TURTLE_ATTACK = 1806;
 	}
@@ -37,9 +41,9 @@ void CTurtle::GetBoundingBox(float& left, float& top, float& right, float& botto
 {
 	if (state == TURTLE_STATE_SHELL || state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
 	{
-		left = x - TURTLE_BBOX_WIDTH / 2;
+		left = x - (TURTLE_BBOX_WIDTH - 2) / 2;
 		top = y - TURTLE_BBOX_HEIGHT_SHELL / 2;
-		right = left + TURTLE_BBOX_WIDTH;
+		right = left + (TURTLE_BBOX_WIDTH - 2);
 		bottom = top + TURTLE_BBOX_HEIGHT_SHELL;
 	}
 	else
@@ -72,24 +76,25 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			return;
 		}
 	}
-	if (state == TURTLE_STATE_WALKING || state == TURTLE_STATE_FLY)
+	if (state == TURTLE_STATE_WALKING)
 	{
 		if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
 	}
-	else if(state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
+	else if (state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
 	{
-		if (dynamic_cast<CInvisibleWall*>(e->obj))
+		if (dynamic_cast<CInvisibleWall*>(e->obj) || dynamic_cast<CCoin*>(e->obj))
 		{
 			return;
 		}
-		else if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CFlyGoomba*>(e->obj) || dynamic_cast<CTurtle*>(e->obj))
+		else if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CFlyGoomba*>(e->obj) || dynamic_cast<CTurtle*>(e->obj) || dynamic_cast<CFlowerFire*>(e->obj))
 		{
 			e->obj->Delete();
+			return;
 		}
 		else if (dynamic_cast<CBrickQuestion*>(e->obj))
 		{
 			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-			CBrickQuestion *brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
 			brickQuestion->SetState(0);
 			brickQuestion->DropItem(mario->level);
 		}
@@ -99,8 +104,15 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			brick->DropItem();
 		}
 	}
-	//if (dynamic_cast<CTurtle*>(e->obj)) return;
-	//if (dynamic_cast<CFlyTurtle*>(e->obj)) return;
+	else if (isPickUp)
+	{
+		if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CFlyGoomba*>(e->obj) || dynamic_cast<CTurtle*>(e->obj) || dynamic_cast<CFlowerFire*>(e->obj))
+		{
+			e->obj->Delete();
+			this->Delete();
+		}
+	}
+	if (dynamic_cast<CTurtle*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -131,12 +143,45 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	vx += ax * dt;
 
-	if ((state == TURTLE_STATE_SHELL) && (GetTickCount64() - shell_start > TURTLE_SHELL_TIMEOUT))
+	if (state == TURTLE_STATE_SHELL)
 	{
-		y = y - 10;
-		SetState(TURTLE_STATE_WALKING);
+		if (isPickUp)
+		{
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			if (mario->isPickUp == false)
+			{
+				if (mario->nx == 1)
+				{
+					SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+				}
+				else
+				{
+					SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				}
+				isPickUp = false;
+			}
+			else
+			{
+				if (mario->nx == 1)
+				{
+					x = mario->x + 12;
+				}
+				else
+				{
+					x = mario->x - 12;
+				}
+				y = mario->y;
+				vy = 0;
+			}
+		}
+		if ((GetTickCount64() - shell_start > TURTLE_SHELL_TIMEOUT))
+		{
+			y = y - 10;
+			SetState(TURTLE_STATE_WALKING);
+			isPickUp = false;
+		}
 	}
-	if ((state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT) && (GetTickCount64() - attack_start > 10000))
+	if ((state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT) && (GetTickCount64() - attack_start > 5000))
 	{
 		this->Delete();
 	}
@@ -148,7 +193,8 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CTurtle::Render()
 {
-	int aniId = ID_ANI_TURTLE_WALKING;
+	int aniId;
+
 	if (state == TURTLE_STATE_SHELL)
 	{
 		aniId = ID_ANI_TURTLE_SHELL;
@@ -159,7 +205,25 @@ void CTurtle::Render()
 	}
 	else if (isFly)
 	{
-		aniId = ID_ANI_TURTLE_FLY;
+		if (vx > 0)
+		{
+			aniId = 1810;
+		}
+		else
+		{
+			aniId = ID_ANI_TURTLE_FLY;
+		}
+	}
+	else
+	{
+		if (vx > 0)
+		{
+			aniId = ID_ANI_TURTLE_WALKING_RIGHT;
+		}
+		else
+		{
+			aniId = ID_ANI_TURTLE_WALKING_LEFT;
+		}
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
@@ -175,16 +239,16 @@ void CTurtle::SetState(int state)
 		vx = 0;
 		break;
 	case TURTLE_STATE_SHELL_ACTTACK_RIGHT:
-		vx = 0.28f;
+		vx = 0.22f;
 		attack_start = GetTickCount64();
 		break;
 	case TURTLE_STATE_SHELL_ACTTACK_LEFT:
-		vx = -0.28f;
+		vx = -0.22f;
 		attack_start = GetTickCount64();
 		break;
 	case TURTLE_STATE_WALKING:
-		ay = TURTLE_GRAVITY;
 		vx = -TURTLE_WALKING_SPEED;
+		ay = TURTLE_GRAVITY;
 		break;
 	case TURTLE_STATE_FLY:
 		ay = 0.0002;

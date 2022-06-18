@@ -22,7 +22,7 @@ CFire::CFire(float x, float y, int direction) : CGameObject(x, y)
 	case 3:
 	{
 		vx = 0.055f;
-		vy = 0.02f;
+		vy = -0.02f;
 		break;
 	}
 	case 4:

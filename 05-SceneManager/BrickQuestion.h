@@ -13,4 +13,5 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 	void DropItem(int marioLevel);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 };

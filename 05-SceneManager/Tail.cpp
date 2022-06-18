@@ -16,14 +16,15 @@ void CTail::Render()
 
 void CTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - 25 / 2;
+	l = x - 14 / 2;
 	t = y - 4 / 2;
-	r = l + 25;
+	r = l + 14;
 	b = t + 4;
 }
+
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (GetTickCount64() - attack_start > 300)
+	if (GetTickCount64() - attack_start > 230)
 	{
 		this->Delete();
 	}
@@ -55,5 +56,21 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
 		brick->DropItem();
+	}
+	else if (dynamic_cast<CBrickQuestion*>(e->obj))
+	{
+		CBrickQuestion* brick = dynamic_cast<CBrickQuestion*>(e->obj);
+		if (brick->GetState() != 0)
+		{
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
+			brickQuestion->SetState(0);
+			brickQuestion->DropItem(mario->level);
+		}
+	}
+	else if (dynamic_cast<CTurtle*>(e->obj))
+	{
+		CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
+		turtle->SetState(TURTLE_STATE_SHELL);
 	}
 }

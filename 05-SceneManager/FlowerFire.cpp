@@ -10,7 +10,7 @@ void CFlowerFire::Render()
 	float cx, cy;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	mario->GetPosition(cx, cy);
-	int ani1, ani2;
+	int ani1, ani2, ani3, ani4;
 
 	if (type == 3)
 	{
@@ -23,11 +23,15 @@ void CFlowerFire::Render()
 		{
 			ani1 = 101;
 			ani2 = 102;
+			ani3 = 108;
+			ani4 = 109;
 		}
 		else
 		{
 			ani1 = 103;
 			ani2 = 104;
+			ani3 = 1010;
+			ani4 = 1011;
 		}
 		if (cx < x)
 		{
@@ -46,12 +50,12 @@ void CFlowerFire::Render()
 		{
 			if (cy < 320)
 			{
-				CSprites::GetInstance()->Get(ani2)->Draw(x, y);
+				CSprites::GetInstance()->Get(ani4)->Draw(x, y);
 				direction = 3;
 			}
 			else
 			{
-				CSprites::GetInstance()->Get(ani1)->Draw(x, y);
+				CSprites::GetInstance()->Get(ani3)->Draw(x, y);
 				direction = 4;
 			}
 		}
@@ -139,9 +143,4 @@ void CFlowerFire::OnNoCollision(DWORD dt)
 
 void CFlowerFire::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		this->Delete();
-		return;
-	}
 }

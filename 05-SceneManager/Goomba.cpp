@@ -37,18 +37,9 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		this->Delete();
-		return;
-	}
 	if (!e->obj->IsBlocking() && !dynamic_cast<CInvisibleWall*>(e->obj)) return;
-	//if (dynamic_cast<CGoomba*>(e->obj)) return;
-	//if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
-	if (dynamic_cast<CTail*>(e->obj))
-	{
-		this->Delete();
-	}
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CFlyGoomba*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
