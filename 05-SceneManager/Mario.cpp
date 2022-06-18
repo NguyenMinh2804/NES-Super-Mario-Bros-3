@@ -466,7 +466,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdFly()
 {
 	int aniId = -1;
-	if (GetTickCount64() - tail_attack < 230)
+	if (GetTickCount64() - tail_attack < TAIL_ATTACK_TIME)
 	{
 		if (nx == 1)
 		{
@@ -489,7 +489,7 @@ int CMario::GetAniIdFly()
 		}
 		else
 		{
-			if (abs(ax) == MARIO_ACCEL_RUN_X)
+			if (isAllowFlying)
 			{
 
 				if (nx >= 0)
@@ -503,11 +503,11 @@ int CMario::GetAniIdFly()
 				{
 					if (nx >= 0)
 					{
-						aniId = 2906;
+						aniId = ID_ANI_MARIO_FLY_FALL_RIGHT;
 					}
 					else
 					{
-						aniId = 2907;
+						aniId = ID_ANI_MARIO_FLY_FALL_LEFT;
 					}
 				}
 				else
@@ -577,7 +577,7 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 
-	DebugOutTitle(L"Coins: %d    -    Game Time: %d", state, (gameTime - (GetTickCount64() - game_start)) / 1000);
+	DebugOutTitle(L"Coins: %d    -    Game Time: %d", isAllowFlying, (gameTime - (GetTickCount64() - game_start)) / 1000);
 }
 
 void CMario::SetState(int state)
@@ -590,26 +590,30 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		if (ax < MARIO_ACCEL_RUN_X && !isFlying)
+		if (ax < MARIO_ACCEL_RUN_X)
 		{
 			ax += MARIO_RUN;
+			isAllowFlying = false;
 		}
 		else
 		{
 			ax = MARIO_ACCEL_RUN_X;
+			isAllowFlying = true;
 		}
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		if (ax > -MARIO_ACCEL_RUN_X && !isFlying)
+		if (ax > -MARIO_ACCEL_RUN_X)
 		{
 			ax -= MARIO_RUN;
+			isAllowFlying = false;
 		}
 		else
 		{
 			ax = -MARIO_ACCEL_RUN_X;
+			isAllowFlying = true;
 		}
 		nx = -1;
 		break;
@@ -618,12 +622,14 @@ void CMario::SetState(int state)
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
+		if(!isFlying)	isAllowFlying = false;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
+		if(!isFlying)	isAllowFlying = false;
 		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;
@@ -650,6 +656,7 @@ void CMario::SetState(int state)
 			vx = 0; vy = 0.0f;
 			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
+		isAllowFlying = false;
 		break;
 
 	case MARIO_STATE_SIT_RELEASE:
@@ -659,21 +666,25 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
+		isAllowFlying = false;
 		break;
 
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
 		vx = 0.0f;
+		isAllowFlying = false;
 		break;
 
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
 		ax = 0;
+		isAllowFlying = false;
 		break;
 	case MARIO_STATE_SLOW_FALL:
 		vy = 0;
 		ay = MARIO_SLOW_GRAVITY;
+		isAllowFlying = false;
 		break;
 	case MARIO_STATE_FLY:
 		isFlying = true;
@@ -681,6 +692,7 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_TAIL_ATTACK:
 		TailAttack();
+		isAllowFlying = false;
 		break;
 	}
 	CGameObject::SetState(state);

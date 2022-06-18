@@ -115,6 +115,10 @@
 #define ID_ANI_MARIO_ATTACK_RIGHT 2904
 #define ID_ANI_MARIO_ATTACK_LEFT 2905
 
+#define ID_ANI_MARIO_FLY_FALL_RIGHT 2906
+#define ID_ANI_MARIO_FLY_FALL_LEFT 2907
+
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -183,7 +187,7 @@ public:
 	int test;
 	float ax;
 	bool isFlying = false;
-	bool iAllowFlying = false;
+	bool isAllowFlying = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;

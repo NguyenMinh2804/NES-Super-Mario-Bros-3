@@ -21,7 +21,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		{
 			if (!mario->isOnPlatform)
 			{
-				if (abs(mario->ax) > 0.00065f)
+				if (mario->isAllowFlying)
 				{
 					mario->SetState(MARIO_STATE_FLY);
 				}
@@ -57,8 +57,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			mario->SetState(MARIO_STATE_TAIL_ATTACK);
 		}		
 		break;
-	case DIK_R: // reset
-		//Reload();
+	case DIK_R:
 		break;
 	}
 }
@@ -96,17 +95,17 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		}
 		else
 		{
-			if (mario->isFlying)
-			{
-				//mario->ax = MARIO_ACCEL_RUN_X;
-				//mario->nx = 1;
-				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-			}
-			else
-			{
-				mario->SetState(MARIO_STATE_WALKING_RIGHT);
-			}
-			//mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			//if (mario->isFlying)
+			//{
+			//	//mario->ax = MARIO_ACCEL_RUN_X;
+			//	//mario->nx = 1;
+			//	mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			//}
+			//else
+			//{
+			//	mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			//}
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
@@ -118,14 +117,15 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		}
 		else
 		{
-			if (mario->isFlying)
-			{
-				mario->SetState(MARIO_STATE_RUNNING_LEFT);
-			}
-			else
-			{
-				mario->SetState(MARIO_STATE_WALKING_LEFT);
-			}
+			//if (mario->isFlying)
+			//{
+			//	mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			//}
+			//else
+			//{
+			//	mario->SetState(MARIO_STATE_WALKING_LEFT);
+			//}
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
 	}
 	else

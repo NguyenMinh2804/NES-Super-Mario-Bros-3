@@ -290,9 +290,6 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
-	
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -337,7 +334,7 @@ void CPlayScene::Render()
 	{
 		float objL, objT, objR, objB;
 		objects[i]->GetBoundingBox(objL, objT, objR, objB);
-		if (objL < r && objR > l && objT < b && objB > t)
+		if (objL > l - (objR - objL) && objR < r + (objR - objL) && objT > t - (objB - objT) && objB < b + (objB - objT))
 		{
 			objects[i]->Render();
 		}
