@@ -22,23 +22,6 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	if (int(x) > 1200 && int(x) < 1250 && isHaveTurtle == false)
-	{
-		CGameObject* obj1 = new CTurtle(1344, 250, 0, 1);
-		CGameObject* obj2 = new CTurtle(1392, 250, 0, 1);
-		CGameObject* obj3 = new CTurtle(1440, 250, 0, 1);
-		currentScene->AddObject(obj1);
-		currentScene->AddObject(obj2);
-		currentScene->AddObject(obj3);
-		isHaveTurtle = true;
-	}
-	if (int(x) > 700 && int(x) < 750 && isHaveFlyGoomba == false)
-	{
-		CGameObject* obj3 = new CFlyGoomba(871, 384);
-		currentScene->AddObject(obj3);
-		isHaveFlyGoomba = true;
-	}
 	vy += ay * dt;
 	vx += ax * dt;
 

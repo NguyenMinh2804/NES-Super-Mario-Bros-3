@@ -102,7 +102,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 /*
 	Parse a line in section [OBJECTS]
 */
-void CPlayScene::_ParseSection_OBJECTS(string line)
+void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 {
 	vector<string> tokens = split(line);
 
@@ -130,7 +130,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_FLYGOOMBA: obj = new CFlyGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_BRICK2: 
+	case OBJECT_TYPE_BRICK2:
 	{
 		float type = (float)atof(tokens[3].c_str());
 		obj = new CBrick2(x, y, type); break;
@@ -195,11 +195,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
 	}
-
-	// General object setup
+	obj->id = objId;
 	obj->SetPosition(x, y);
-
-	AddObject(obj);
+	objects.push_back(obj);
 }
 
 void CPlayScene::_ParseSection_MAPS(string line)
@@ -262,6 +260,7 @@ void CPlayScene::Load()
 	int section = SCENE_SECTION_UNKNOWN;
 
 	char str[MAX_SCENE_LINE];
+	int objId = 0;
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
 		string line(str);
@@ -279,7 +278,12 @@ void CPlayScene::Load()
 		{
 		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 		case SCENE_SECTION_MAPS: _ParseSection_MAPS(line); break;
-		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_OBJECTS:
+		{
+			_ParseSection_OBJECTS(line, objId);
+			objId++;
+			break;
+		}
 		}
 	}
 
@@ -288,19 +292,41 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
+bool CPlayScene::LinearSearch(int x)
+{
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->id == x)
+			return true;
+	}
+	return false;
+}
+
 void CPlayScene::Update(DWORD dt)
 {
+	CGame* game = CGame::GetInstance();
+	float cx1, cy1;
+	CGame::GetInstance()->GetCamPos(cx1, cy1);
+	float l = cx1;
+	float t = cy1;
+	float r = l + game->GetBackBufferWidth();
+	float b = t + game->GetBackBufferHeight();
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		float objL, objT, objR, objB;
+		objects[i]->GetBoundingBox(objL, objT, objR, objB);
+		if (objects[i]->isLoaded == true || objL > l - (objR - objL) && objR < r + (objR - objL) && objT > t - (objB - objT) && objB < b + (objB - objT))
+		{
+			objects[i]->isLoaded = true;
+			objects[i]->Update(dt, &coObjects);
+		}
 	}
-
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -308,7 +334,6 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
-	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 	if (cx < 0) cx = -9;
@@ -317,6 +342,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cy > 223 || cy > 120) cy = 223;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
 	PurgeDeletedObjects();
 }
 
@@ -393,7 +419,7 @@ void CPlayScene::PurgeDeletedObjects()
 		objects.end());
 }
 
-void CPlayScene::AddObject(CGameObject *object)
+void CPlayScene::AddObject(CGameObject* object)
 {
 	objects.push_back(object);
 }

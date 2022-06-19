@@ -344,12 +344,16 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 18	560	336	1	0
 18	1530	368	0	0
 18	2000	352	1	0
+18	1344	270	0	1
+18	1392	270	0	1
+18	1440	270	0	1
 
 #GOOMBA
 2	224	400
 2	528	400
-2	823	384
-2	855	384
+2	816	384
+2	864	384
+15	928	384
 
 # MARIO
 0	100	300

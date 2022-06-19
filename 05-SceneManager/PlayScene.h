@@ -22,7 +22,7 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
-	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_OBJECTS(string line, int objId);
 
 	void LoadAssets(LPCWSTR assetFile);
 	
@@ -41,6 +41,7 @@ public:
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 	void AddObject(CGameObject *object);
+	bool LinearSearch(int x);
 };
 
 typedef CPlayScene* LPPLAYSCENE;
