@@ -336,10 +336,10 @@ void CPlayScene::Update(DWORD dt)
 
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-	if (cx < 0) cx = -9;
-	if (cx > 2550) cx = 2550;
+	if (cx < 0) cx = - 8;
 	if (cy < 0) cy = 0;
-	if (cy > 223 || cy > 120) cy = 223;
+	if (cx > map->maxX) cx = map->maxX;
+	if (cy > map->maxY || cy > map->minY) cy = map->maxY - 11;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 

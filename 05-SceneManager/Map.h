@@ -9,6 +9,8 @@ class Map
 	int totalColsOfTitleSet, totalRowsOfTileSet;
 	int totalRowsOfMap, totalColsOfMap;
 	int totalTiles;
+
+
 	LPTEXTURE tileSet;
 	vector<LPSPRITE> tiles;
 	int height = 0;
@@ -17,7 +19,9 @@ class Map
 
 
 public:
-
+	int maxX;
+	int maxY;
+	int minY;
 	Map(int idMap, int nTitleCols,
 		int nTitleRows, int nMapCols, int nMapRows,
 		int nTotalTiles);
@@ -25,7 +29,7 @@ public:
 	Map() {};
 	void Init(int idMap, int nTitleCols,
 		int nTitleRows, int nMapCols, int nMapRows,
-		int nTotalTiles);
+		int nTotalTiles, int maxX, int maxY, int minY);
 	void CreateTilesFromTileSet();
 	void LoadMatrix(LPCWSTR path);
 	void LoadInformation(LPCWSTR path);

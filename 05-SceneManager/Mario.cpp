@@ -32,6 +32,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
+	if (GetTickCount64() - fly_time > MARIO_FLY_TIME)
+	{
+		isAllowFlying = false;
+	}
+
 	if (GetTickCount64() - game_start > gameTime)
 	{
 		SetState(MARIO_STATE_DIE);
@@ -53,8 +59,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0)
 		{
 			isOnPlatform = true;
-			vy = 0;
+			isAllowFlying = false;
 			isFlying = false;
+			vy = 0;
 		}
 	}
 	else
@@ -135,7 +142,7 @@ void CMario::OnCollisionWithBrickQuestion(LPCOLLISIONEVENT e)
 	{
 		if (brickQuestion->GetState() != 0)
 		{
-			brickQuestion->SetState(0);
+			brickQuestion->SetState(BRICK_QUESTION_STATE_BROKEN);
 			brickQuestion->DropItem(level);
 		}
 	}
@@ -176,6 +183,17 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
 			}
 			if (e->ny < 0)
+			{
+				if (x + 4 > turtle->x + 8)
+				{
+					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				}
+				else
+				{
+					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+				}
+			}
+			else
 			{
 				if (x + 4 > turtle->x + 8)
 				{
@@ -472,13 +490,20 @@ int CMario::GetAniIdFly()
 		}
 		else
 		{
-			if (isAllowFlying)
+			if (isFlying)
 			{
-
 				if (nx >= 0)
 					aniId = ID_ANI_MARIO_JUMP_FLY_RUN_RIGHT;
 				else
 					aniId = ID_ANI_MARIO_JUMP_FLY_RUN_LEFT;
+			}
+			else if (abs(ax) == MARIO_ACCEL_RUN_X )
+			{
+
+				if (nx >= 0)
+					aniId = ID_ANI_MARIO_FLY_RUN_JUMP_RIGHT;
+				else
+					aniId = ID_ANI_MARIO_FLY_RUN_JUMP_LEFT;
 			}
 			else
 			{
@@ -575,13 +600,14 @@ void CMario::SetState(int state)
 		maxVx = MARIO_RUNNING_SPEED;
 		if (ax < MARIO_ACCEL_RUN_X)
 		{
-			ax += MARIO_RUN;
-			isAllowFlying = false;
+			if (isOnPlatform)
+			{
+				ax += MARIO_RUN;
+			}
 		}
 		else
 		{
 			ax = MARIO_ACCEL_RUN_X;
-			isAllowFlying = true;
 		}
 		nx = 1;
 		break;
@@ -590,13 +616,14 @@ void CMario::SetState(int state)
 		maxVx = -MARIO_RUNNING_SPEED;
 		if (ax > -MARIO_ACCEL_RUN_X)
 		{
-			ax -= MARIO_RUN;
-			isAllowFlying = false;
+			if (isOnPlatform)
+			{
+				ax -= MARIO_RUN;
+			}
 		}
 		else
 		{
 			ax = -MARIO_ACCEL_RUN_X;
-			isAllowFlying = true;
 		}
 		nx = -1;
 		break;
@@ -605,14 +632,12 @@ void CMario::SetState(int state)
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
-		if(!isFlying)	isAllowFlying = false;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
-		if(!isFlying)	isAllowFlying = false;
 		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;
@@ -620,15 +645,26 @@ void CMario::SetState(int state)
 		{
 			isOnPlatform = false;
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
+			{
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
+				if (abs(ax) == MARIO_ACCEL_RUN_X)
+				{
+					isAllowFlying = true;
+					fly_time = GetTickCount64();
+				}
+			}
 			else
+			{
 				vy = -MARIO_JUMP_SPEED_Y;
+			}
 		}
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
 		ay = MARIO_GRAVITY;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		isAllowFlying = false;
+		isFlying = false;
 		break;
 
 	case MARIO_STATE_SIT:
@@ -640,6 +676,7 @@ void CMario::SetState(int state)
 			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		isAllowFlying = false;
+		isFlying = false;
 		break;
 
 	case MARIO_STATE_SIT_RELEASE:
@@ -650,12 +687,14 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		isAllowFlying = false;
+		isFlying = false;
 		break;
 
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
 		vx = 0.0f;
 		isAllowFlying = false;
+		isFlying = false;
 		break;
 
 	case MARIO_STATE_DIE:
@@ -663,19 +702,22 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		isAllowFlying = false;
+		isFlying = false;
 		break;
 	case MARIO_STATE_SLOW_FALL:
 		vy = 0;
 		ay = MARIO_SLOW_GRAVITY;
 		isAllowFlying = false;
+		isFlying = false;
 		break;
 	case MARIO_STATE_FLY:
-		isFlying = true;
 		vy = -MARIO_FLY_SPEED_Y;
+		isFlying = true;
 		break;
 	case MARIO_STATE_TAIL_ATTACK:
-		TailAttack();
 		isAllowFlying = false;
+		isFlying = false;
+		TailAttack();
 		break;
 	}
 	CGameObject::SetState(state);

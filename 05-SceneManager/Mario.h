@@ -11,11 +11,11 @@
 
 #define MARIO_ACCEL_WALK_X	0.0002f
 #define MARIO_ACCEL_RUN_X	0.0007f
-#define MARIO_RUN	0.00001f
+#define MARIO_RUN	0.000008f
 
 #define MARIO_JUMP_SPEED_Y		0.33f
 #define MARIO_JUMP_RUN_SPEED_Y	0.43f
-#define MARIO_FLY_SPEED_Y	0.3f
+#define MARIO_FLY_SPEED_Y	0.2f
 
 #define MARIO_GRAVITY			0.0007f
 #define MARIO_SLOW_GRAVITY			0.0001f
@@ -118,7 +118,8 @@
 #define ID_ANI_MARIO_FLY_FALL_RIGHT 2906
 #define ID_ANI_MARIO_FLY_FALL_LEFT 2907
 
-
+#define ID_ANI_MARIO_FLY_RUN_JUMP_RIGHT 2908
+#define ID_ANI_MARIO_FLY_RUN_JUMP_LEFT 2909
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -146,6 +147,7 @@
 #define MARIO_FLY_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_FLY_TIME 5000
 
 class CMario : public CGameObject
 {
@@ -157,9 +159,8 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG game_start;
 	ULONGLONG tail_attack;
-	ULONGLONG fly_time;
-	BOOLEAN isHaveFlyGoomba = false;
-	BOOLEAN isHaveTurtle = false;
+	ULONGLONG fly_time;	
+	ULONGLONG slow_fall_time;
 	
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -200,6 +201,7 @@ public:
 		untouchable_start = -1;
 		tail_attack = -1;
 		fly_time = -1;
+		slow_fall_time = -1;
 		this->gameTime = gameTime;
 		game_start = GetTickCount64();
 		isOnPlatform = false;

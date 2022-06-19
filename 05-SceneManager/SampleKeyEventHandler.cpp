@@ -70,7 +70,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S:
-		mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		if(!mario->isAllowFlying)	mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;
 	case DIK_A:
 		mario->isPickUp = false;
@@ -95,16 +95,6 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		}
 		else
 		{
-			//if (mario->isFlying)
-			//{
-			//	//mario->ax = MARIO_ACCEL_RUN_X;
-			//	//mario->nx = 1;
-			//	mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-			//}
-			//else
-			//{
-			//	mario->SetState(MARIO_STATE_WALKING_RIGHT);
-			//}
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 	}
@@ -117,17 +107,9 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		}
 		else
 		{
-			//if (mario->isFlying)
-			//{
-			//	mario->SetState(MARIO_STATE_RUNNING_LEFT);
-			//}
-			//else
-			//{
-			//	mario->SetState(MARIO_STATE_WALKING_LEFT);
-			//}
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
 	}
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+		if (!mario->isAllowFlying) mario->SetState(MARIO_STATE_IDLE);
 }

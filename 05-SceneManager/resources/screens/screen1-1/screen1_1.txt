@@ -19,7 +19,7 @@ resources/objects/brick2.txt
 resources/objects/button.txt
 
 [MAPS]
-resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	100000
+resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	1000000
 #
 
 [OBJECTS]
@@ -343,10 +343,10 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 #TURTLE
 18	560	336	1	0
 18	1530	368	0	0
-18	2000	352	1	0
 18	1344	270	0	1
 18	1392	270	0	1
 18	1440	270	0	1
+18	2144	352	1	0
 
 #GOOMBA
 2	224	400
