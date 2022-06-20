@@ -19,6 +19,7 @@
 #include "Brick2.h"
 #include "PlayScene.h"
 #include "Button.h"
+#include "Teleport.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -92,29 +93,42 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFlyGoomba(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
-	else if (dynamic_cast<CRectangle*>(e->obj))
-		OnCollisionWithRectangle(e);
 	else if (dynamic_cast<CTurtle*>(e->obj))
 		OnCollisionWithTurtle(e);
 	else if (dynamic_cast<CButton*>(e->obj))
 		OnCollisionWithButton(e);
+	else if (dynamic_cast<CTeleport*>(e->obj))
+		OnCollisionWithTeleport(e);
 }
 
-
-void CMario::OnCollisionWithRectangle(LPCOLLISIONEVENT e)
+void CMario::OnCollisionWithTeleport(LPCOLLISIONEVENT e)
 {
+	
+	CTeleport* teleport = dynamic_cast<CTeleport*>(e->obj);
+	if (teleport->type == TELEPORT_TYPE_DOWN && isPressDown == true)
+	{
+		SetPosition(teleport->teleX, teleport->teleY);
+		CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		currentScene->isInExtraMap = true;
+	}
+	else if (teleport->type == TELEPORT_TYPE_UP && isPressUp == true)
+	{
+		SetPosition(teleport->teleX, teleport->teleY);
+		CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+		currentScene->isInExtraMap = false;
+	}
 }
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	SetLevel(3);
+	SetLevel(MARIO_LEVEL_FLY);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	SetLevel(2);
+	SetLevel(MARIO_LEVEL_BIG);
 }
 
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
@@ -338,8 +352,12 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	SetPosition(1000, 350);
+	//if (isDressDown)
+	//{
+	//	CPortal* p = (CPortal*)e->obj;
+	//	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	//}
 }
 
 //
@@ -467,6 +485,18 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdFly()
 {
 	int aniId = -1;
+	if (GetTickCount64() - tail_attack < TAIL_ATTACK_TIME)
+	{
+		if (nx == 1)
+		{
+			aniId = ID_ANI_MARIO_ATTACK_RIGHT;
+		}
+		else
+		{
+			aniId = ID_ANI_MARIO_ATTACK_LEFT;
+		}
+		return aniId;
+	}
 	if (GetTickCount64() - tail_attack < TAIL_ATTACK_TIME)
 	{
 		if (nx == 1)
@@ -774,6 +804,8 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	level = l;
+	CGame* game = CGame::GetInstance();
+	game->SetMarioLevel(l);
 }
 
 void CMario::TailAttack()

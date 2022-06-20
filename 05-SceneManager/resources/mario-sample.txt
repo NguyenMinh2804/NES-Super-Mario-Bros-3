@@ -6,10 +6,10 @@ height	240
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
-0	intro.txt
-1	scene01.txt
-2	scene02.txt
-5	scene0005.txt
+0	resources/screens/intro.txt
+1	resources/screens/scene01.txt
+2	resources/screens/scene02.txt
+5	resources/screens/scene0005.txt
 6	resources/screens/screen1-1/screen1_1.txt
 
 # id	file 

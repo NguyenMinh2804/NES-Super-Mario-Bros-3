@@ -42,6 +42,7 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 	void AddObject(CGameObject *object);
 	bool LinearSearch(int x);
+	bool isInExtraMap = false;
 };
 
 typedef CPlayScene* LPPLAYSCENE;

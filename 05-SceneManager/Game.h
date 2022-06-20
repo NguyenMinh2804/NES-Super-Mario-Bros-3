@@ -58,11 +58,10 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
-
+	int marioLevel = 1;
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
-
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen. (x,y) is at the CENTER of the image
 	// rect : if NULL, the whole texture will be drawn
@@ -113,7 +112,8 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
-
+	void SetMarioLevel(int level) { marioLevel = level; }
+	int GetMarioLevel() { return marioLevel; }
 	~CGame();
 };
 typedef CGame* LPGAME;

@@ -24,6 +24,7 @@
 #include "InvisibleWall.h"
 #include "Wall.h"
 #include "Turtle.h"
+#include "Teleport.h"
 
 using namespace std;
 
@@ -191,6 +192,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 		obj = new CTurtle(x, y, type, isFly);
 		break;
 	}
+	case OBJECT_TYPE_TELEPORT:
+	{
+		float type = (float)atof(tokens[3].c_str());
+		float teleX = (float)atof(tokens[4].c_str());
+		float teleY = (float)atof(tokens[5].c_str());
+		obj = new CTeleport(x, y, type, teleX, teleY);
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -336,10 +345,18 @@ void CPlayScene::Update(DWORD dt)
 
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
-	if (cx < 0) cx = - 8;
-	if (cy < 0) cy = 0;
-	if (cx > map->maxX) cx = map->maxX;
-	if (cy > map->maxY || cy > map->minY) cy = map->maxY - 11;
+	if (cy < 0) cy = - 8;
+	if (cy > map->maxY || cy > map->minY) cy = map->maxY;
+	if (cx < 0) cx = -8;
+	if (isInExtraMap)
+	{
+		if (cx < map->minExtraMapX) cx = map->minExtraMapX;
+		if (cx > map->maxExtraMapX) cx = map->maxExtraMapX;
+	}
+	else
+	{
+		if (cx > map->maxX) cx = map->maxX;
+	}
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 

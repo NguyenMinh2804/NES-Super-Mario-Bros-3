@@ -147,7 +147,7 @@
 #define MARIO_FLY_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 2500
-#define MARIO_FLY_TIME 5000
+#define MARIO_FLY_TIME 4000
 
 class CMario : public CGameObject
 {
@@ -175,6 +175,7 @@ class CMario : public CGameObject
 	void OnCollisionWithTurtle(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick2(LPCOLLISIONEVENT e);
 	void OnCollisionWithButton(LPCOLLISIONEVENT e);
+	void OnCollisionWithTeleport(LPCOLLISIONEVENT e);
 	
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -189,14 +190,16 @@ public:
 	float ax;
 	bool isFlying = false;
 	bool isAllowFlying = false;
+	bool isPressDown = false;
+	bool isPressUp = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
-
-		level = MARIO_LEVEL_SMALL;
+		CGame* game = CGame::GetInstance();
+		level = game->GetMarioLevel();
 		untouchable = 0;
 		untouchable_start = -1;
 		tail_attack = -1;

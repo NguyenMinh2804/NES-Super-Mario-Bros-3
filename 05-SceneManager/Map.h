@@ -22,6 +22,8 @@ public:
 	int maxX;
 	int maxY;
 	int minY;
+	int minExtraMapX;
+	int maxExtraMapX;
 	Map(int idMap, int nTitleCols,
 		int nTitleRows, int nMapCols, int nMapRows,
 		int nTotalTiles);
@@ -29,7 +31,7 @@ public:
 	Map() {};
 	void Init(int idMap, int nTitleCols,
 		int nTitleRows, int nMapCols, int nMapRows,
-		int nTotalTiles, int maxX, int maxY, int minY);
+		int nTotalTiles, int maxX, int maxY, int minY, int minExtraMapX, int maxExtraMapX);
 	void CreateTilesFromTileSet();
 	void LoadMatrix(LPCWSTR path);
 	void LoadInformation(LPCWSTR path);

@@ -115,14 +115,15 @@ void Map::LoadInformation(LPCWSTR path)
 	int maxX = atoi(tokens[6].c_str());
 	int maxY = atoi(tokens[7].c_str());
 	int minY = atoi(tokens[8].c_str());
-
+	int minExtraMapX = atoi(tokens[9].c_str());
+	int maxExtraMapX = atoi(tokens[10].c_str());
 	this->Init(idMap, tolRowTileSet, tolColTileSet,
-		tolRowMap, tolColMap, totalTiles, maxX, maxY, minY);
+		tolRowMap, tolColMap, totalTiles, maxX, maxY, minY, minExtraMapX, maxExtraMapX);
 }
 
 
 void Map::Init(int idMap, int nTitleCols, int nTitleRows, int nMapCols,
-	int nMapRows, int nTotalTiles, int maxX, int maxY, int minY)
+	int nMapRows, int nTotalTiles, int maxX, int maxY, int minY, int minExtraMapX, int maxExtraMapX)
 {
 	this->tileSet = CTextures::GetInstance()->Get(idMap);
 
@@ -136,5 +137,6 @@ void Map::Init(int idMap, int nTitleCols, int nTitleRows, int nMapCols,
 	this->maxX = maxX;
 	this->maxY = maxY;
 	this->minY = minY;
-
+	this->minExtraMapX = minExtraMapX;
+	this->maxExtraMapX = maxExtraMapX;
 }

@@ -1,9 +1,9 @@
 # list of object assets to load in this scene
 [ASSETS]
-resources/objects/mario.txt
-resources/objects/coin.txt
-resources/objects/cloud.txt
-resources/objects/brick.txt
+mario.txt
+coin.txt
+cloud.txt
+brick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

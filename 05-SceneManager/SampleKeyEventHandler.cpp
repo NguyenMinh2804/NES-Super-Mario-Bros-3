@@ -15,6 +15,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
+		mario->isPressDown = true;
+		break;
+	case DIK_UP:
+		mario->isPressUp = true;
 		break;
 	case DIK_S:
 		if (mario->level == 3)
@@ -77,6 +81,10 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
+		mario->isPressDown = false;
+		break;
+	case DIK_UP:
+		mario->isPressUp = false;
 		break;
 	}
 }
