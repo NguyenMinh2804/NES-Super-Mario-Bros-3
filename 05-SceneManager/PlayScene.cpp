@@ -155,7 +155,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 	case OBJECT_TYPE_WATER_PIPE:
 	{
 		float size = (float)atof(tokens[3].c_str());
-		obj = new CWaterPipe(x, y, size); break;
+		float type = (float)atof(tokens[4].c_str());
+		obj = new CWaterPipe(x, y, size, type); break;
 	}
 	case OBJECT_TYPE_FLOWER_FIRE:
 	{

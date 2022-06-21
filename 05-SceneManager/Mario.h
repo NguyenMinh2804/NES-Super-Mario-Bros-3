@@ -12,6 +12,7 @@
 #define MARIO_ACCEL_WALK_X	0.0002f
 #define MARIO_ACCEL_RUN_X	0.0007f
 #define MARIO_RUN	0.000008f
+#define MARIO_TELEPORT_SPEED	0.6
 
 #define MARIO_JUMP_SPEED_Y		0.33f
 #define MARIO_JUMP_RUN_SPEED_Y	0.43f
@@ -120,6 +121,9 @@
 
 #define ID_ANI_MARIO_FLY_RUN_JUMP_RIGHT 2908
 #define ID_ANI_MARIO_FLY_RUN_JUMP_LEFT 2909
+
+#define ID_ANI_MARIO_FLY_TELEPORT 2910
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -148,6 +152,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_FLY_TIME 4000
+#define MARIO_TELEPORT_TIME 1000
 
 class CMario : public CGameObject
 {
@@ -161,7 +166,8 @@ class CMario : public CGameObject
 	ULONGLONG tail_attack;
 	ULONGLONG fly_time;	
 	ULONGLONG slow_fall_time;
-	
+	ULONGLONG teleport_time;
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -184,6 +190,8 @@ class CMario : public CGameObject
 public:
 	int coin;
 	int level;
+	int teleX;
+	int teleY;
 	bool isPickUp = false;
 	BOOLEAN isOnPlatform;
 	int test;
@@ -192,6 +200,8 @@ public:
 	bool isAllowFlying = false;
 	bool isPressDown = false;
 	bool isPressUp = false;
+	bool isTeleport = false;
+	bool isTeleDown = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -217,16 +227,25 @@ public:
 
 	int IsCollidable()
 	{
-		return (state != MARIO_STATE_DIE);
+		if (isTeleport)
+		{
+			return false;
+		}
+		else if (state == MARIO_STATE_DIE)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 5; untouchable_start = GetTickCount64(); }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void TailAttack();
+	void Teleport();
+
 };

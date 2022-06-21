@@ -2,7 +2,7 @@
 
 void CTeleport::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CTeleport::GetBoundingBox(float& l, float& t, float& r, float& b)

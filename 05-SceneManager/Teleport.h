@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-#define TELEPORT_BBOX_WIDTH 32
+#define TELEPORT_BBOX_WIDTH 16
 #define TELEPORT_BBOX_HEIGHT 16
 #define TELEPORT_TYPE_DOWN 0
 #define TELEPORT_TYPE_UP 1
