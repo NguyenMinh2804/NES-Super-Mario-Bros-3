@@ -43,6 +43,7 @@
 #define MARIO_STATE_SLOW_FALL	900
 #define MARIO_STATE_FLY	901
 #define MARIO_STATE_TAIL_ATTACK	902
+#define MARIO_STATE_OPPOSITE	903
 
 #pragma region ANIMATION_ID
 
@@ -123,6 +124,9 @@
 #define ID_ANI_MARIO_FLY_RUN_JUMP_LEFT 2909
 
 #define ID_ANI_MARIO_FLY_TELEPORT 2910
+#define ID_ANI_MARIO_BIG_OPPOSITE 1602
+#define ID_ANI_MARIO_SMALL_OPPOSITE 1603
+#define ID_ANI_MARIO_FLY_OPPOSITE 2911
 
 #pragma endregion
 
@@ -153,6 +157,12 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_FLY_TIME 4000
 #define MARIO_TELEPORT_TIME 1000
+#define MARIO_DIE_TIME 2000
+#define WOLRD_MAP_TILE 32
+#define WOLRD_BLOCK_RIGHT 5
+#define WOLRD_BLOCK_LEFT 4
+#define WOLRD_BLOCK_UP	2
+#define WOLRD_BLOCK_DOWN 3
 
 class CMario : public CGameObject
 {
@@ -167,6 +177,7 @@ class CMario : public CGameObject
 	ULONGLONG fly_time;	
 	ULONGLONG slow_fall_time;
 	ULONGLONG teleport_time;
+	ULONGLONG start_die;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -200,8 +211,10 @@ public:
 	bool isAllowFlying = false;
 	bool isPressDown = false;
 	bool isPressUp = false;
-	bool isTeleport = false;
+	bool isPressS = false;
+	bool isTeleporting = false;
 	bool isTeleDown = false;
+	bool isTeleported = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -220,6 +233,7 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 		test = 0;
+		start_die = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -227,7 +241,7 @@ public:
 
 	int IsCollidable()
 	{
-		if (isTeleport)
+		if (isTeleporting)
 		{
 			return false;
 		}
@@ -247,5 +261,10 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void TailAttack();
 	void Teleport();
-
+	void GoRight();
+	void GoLeft();
+	void GoUp();
+	void GoDown();
+	void GoPlayScreen();
+	bool AllowMoveInWorldMap(int x, int y, bool isLeft, bool isRight, bool isUp, bool isDown);
 };

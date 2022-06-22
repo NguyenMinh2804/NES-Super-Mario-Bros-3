@@ -1,0 +1,84 @@
+# list of object assets to load in this scene
+[ASSETS]
+resources/objects/mario.txt
+resources/objects/tree.txt
+resources/objects/wood.txt
+[MAPS]
+resources/screens/screen1/screen1_Inf.txt	resources/screens/screen1/screen1_Matrix.txt	resources/screens/screen1/screen1_Map_Matrix.txt
+#
+
+[OBJECTS]
+#WOOD 
+8	64	16	1
+8	128	16	2
+8	160	16	3
+8	160	48	4
+8	64	146	5
+8	128	146	6
+8	32	48	7
+8	128	80	8
+8	208	98	9
+#TREE 
+21	16	16
+21	32	16
+21	48	16
+21	16	32
+21	32	32
+21	48	32
+
+21	16	64
+21	32	64
+21	48	64
+21	16	80
+21	32	80
+21	48	80
+21	16	96
+
+21	80	32
+21	96	32
+21	112	32
+21	80	48
+21	96	48
+21	112	48
+21	80	64
+21	96	64
+21	112	64
+
+21	96	96
+21	112	96
+21	128	96
+
+21	144	32
+21	160	32
+21	176	32
+
+21	144	64
+21	160	64
+21	176	64
+21	192	64
+
+21	144	80
+21	160	80
+
+21	208	16
+21	224	16
+
+21	208	32
+21	224	32
+
+21	208	48
+21	224	48
+
+21	208	64
+21	224	64
+
+21	224	80
+
+21	224	96
+
+21	224	112
+21	224	128
+21	224	144
+
+# MARIO
+0	32	48

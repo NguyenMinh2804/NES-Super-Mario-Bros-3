@@ -39,9 +39,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAllowFlying = false;
 	}
 
-	if (GetTickCount64() - game_start > gameTime)
+	//if (GetTickCount64() - game_start > gameTime)
+	//{
+	//	SetState(MARIO_STATE_DIE);
+	//}
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	if (y > currentScene->map->maxY * 2 && currentScene->id != WORLD_1_ID)
 	{
 		SetState(MARIO_STATE_DIE);
+	}
+	if (currentScene->id == WORLD_1_ID)
+	{
+		SetState(MARIO_STATE_OPPOSITE);
 	}
 	Teleport();
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -49,32 +58,36 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::Teleport()
 {
-	if (isTeleport && GetTickCount64() - teleport_time < MARIO_TELEPORT_TIME)
+	if (isTeleporting && GetTickCount64() - teleport_time < MARIO_TELEPORT_TIME)
 	{
 		vy = 0;
 		y = isTeleDown ? y + MARIO_TELEPORT_SPEED : y - MARIO_TELEPORT_SPEED;
 		vx = 0;
 	}
-	else if (isTeleport && GetTickCount64() - teleport_time == MARIO_TELEPORT_TIME)
+	else if (!isTeleported && isTeleporting && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME)
 	{
 		SetPosition(teleX, teleY);
+		vy = 0;
 		CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 		currentScene->isInExtraMap = isTeleDown ? true : false;
+		isTeleported = true;
 	}
-	else if (!isTeleDown && isTeleport && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME && GetTickCount64() - teleport_time < MARIO_TELEPORT_TIME + MARIO_TELEPORT_TIME)
+	else if (!isTeleDown && isTeleporting && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME && GetTickCount64() - teleport_time < MARIO_TELEPORT_TIME + MARIO_TELEPORT_TIME)
 	{
 		vy = 0;
-		y = isTeleDown ? y + MARIO_TELEPORT_SPEED : y - MARIO_TELEPORT_SPEED;
+		y = y - MARIO_TELEPORT_SPEED;
 		vx = 0;
 	}
-	else if (!isTeleDown && isTeleport && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME + MARIO_TELEPORT_TIME)
+	else if (!isTeleDown && isTeleporting && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME + MARIO_TELEPORT_TIME)
 	{
-		isTeleport = false;
+		isTeleporting = false;
+		isTeleported = false;
 		teleport_time = -1;
 	}
-	else if(isTeleDown && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME)
+	else if (isTeleDown && isTeleporting && GetTickCount64() - teleport_time > MARIO_TELEPORT_TIME)
 	{
-		isTeleport = false;
+		isTeleporting = false;
+		isTeleported = false;
 		teleport_time = -1;
 	}
 
@@ -138,17 +151,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithTeleport(LPCOLLISIONEVENT e)
 {
 	CTeleport* teleport = dynamic_cast<CTeleport*>(e->obj);
-	if (teleport->type == TELEPORT_TYPE_DOWN && isPressDown == true && isTeleport == false)
+	if (teleport->type == TELEPORT_TYPE_DOWN && isPressDown == true && isTeleporting == false)
 	{
-		isTeleport = true;
+		isTeleporting = true;
 		teleport_time = GetTickCount64();
 		this->teleX = teleport->teleX;
 		this->teleY = teleport->teleY;
 		this->isTeleDown = true;
 	}
-	else if (teleport->type == TELEPORT_TYPE_UP && isPressUp == true && isTeleport == false)
+	else if (teleport->type == TELEPORT_TYPE_UP && isPressUp == true && isTeleporting == false)
 	{
-		isTeleport = true;
+		isTeleporting = true;
 		teleport_time = GetTickCount64();
 		this->teleX = teleport->teleX;
 		this->teleY = teleport->teleY;
@@ -249,7 +262,7 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 			}
 		}
 	}
-	else if (turtle->GetState() != TURTLE_STATE_SHELL_ACTTACK_RIGHT && turtle->GetState() != TURTLE_STATE_SHELL_ACTTACK_LEFT)
+	else
 	{
 		if (e->ny < 0)
 		{
@@ -381,20 +394,18 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	//SetPosition(1000, 350);
-	//if (isDressDown)
-	//{
-	//	CPortal* p = (CPortal*)e->obj;
-	//	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
-	//}
+	CPortal* p = (CPortal*)e->obj;
+	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
-//
-// Get animation ID for small Mario
-//
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
+	if (state == MARIO_STATE_OPPOSITE)
+	{
+		aniId = ID_ANI_MARIO_SMALL_OPPOSITE;
+		return aniId;
+	}
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -457,6 +468,11 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
+	if (state == MARIO_STATE_OPPOSITE)
+	{
+		aniId = ID_ANI_MARIO_BIG_OPPOSITE;
+		return aniId;
+	}
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -526,9 +542,14 @@ int CMario::GetAniIdFly()
 		}
 		return aniId;
 	}
-	if (isTeleport)
+	if (isTeleporting)
 	{
 		aniId = ID_ANI_MARIO_FLY_TELEPORT;
+		return aniId;
+	}
+	if (state == MARIO_STATE_OPPOSITE)
+	{
+		aniId = ID_ANI_MARIO_FLY_OPPOSITE;
 		return aniId;
 	}
 	if (!isOnPlatform)
@@ -637,13 +658,20 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 
-	DebugOutTitle(L"Coins: %d    -    Game Time: %d", isAllowFlying, (gameTime - (GetTickCount64() - game_start)) / 1000);
+	DebugOutTitle(L"Coins: %d    -    Game Time: %d", coin, (gameTime - (GetTickCount64() - game_start)) / 1000);
 }
 
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return;
+	if (this->state == MARIO_STATE_DIE)
+	{
+		if (GetTickCount64() - start_die > MARIO_DIE_TIME)
+		{
+			CGame::GetInstance()->InitiateSwitchScene(WORLD_1_ID);
+		}
+		return;
+	};
 
 	switch (state)
 	{
@@ -720,7 +748,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_SIT:
-		if (isOnPlatform && level != MARIO_LEVEL_SMALL && !isTeleport)
+		if (isOnPlatform && level != MARIO_LEVEL_SMALL && !isTeleporting)
 		{
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
@@ -755,6 +783,8 @@ void CMario::SetState(int state)
 		ax = 0;
 		isAllowFlying = false;
 		isFlying = false;
+		start_die = GetTickCount64();
+		SetLevel(MARIO_LEVEL_SMALL);
 		break;
 	case MARIO_STATE_SLOW_FALL:
 		vy = 0;
@@ -770,6 +800,12 @@ void CMario::SetState(int state)
 		isAllowFlying = false;
 		isFlying = false;
 		TailAttack();
+		break;
+	case MARIO_STATE_OPPOSITE:
+		vy = 0;
+		vx = 0;
+		ax = 0;
+		ay = 0;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -839,3 +875,66 @@ void CMario::TailAttack()
 	currentScene->AddObject(obj);
 }
 
+void CMario::GoRight()
+{
+	if (AllowMoveInWorldMap((x + WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, true, false, false))
+	{
+		SetPosition(x + WOLRD_MAP_TILE, y);
+	}
+}
+void CMario::GoLeft()
+{
+	if (AllowMoveInWorldMap((x - WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, true, false, false, false))
+	{
+		SetPosition(x - WOLRD_MAP_TILE, y);
+	}
+}
+
+void CMario::GoDown()
+{
+	if (AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, false, true))
+	{
+		SetPosition(x , y + WOLRD_MAP_TILE);
+	}
+}
+
+void CMario::GoUp()
+{
+	if (AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y - WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, true, false))
+	{
+		SetPosition(x , y - WOLRD_MAP_TILE);
+	}
+}
+
+void CMario::GoPlayScreen()
+{
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	int screenID = currentScene->map->worldMapMatrix[int((y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE)][int(x / WOLRD_MAP_TILE)];
+	if (screenID == WORLD_1_1_ID)
+	{
+		CGame::GetInstance()->InitiateSwitchScene(screenID);
+	}
+}
+
+bool CMario::AllowMoveInWorldMap(int x, int y, bool isLeft, bool isRight, bool isUp, bool isDown)
+{
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	int index = currentScene->map->worldMapMatrix[y][x];
+	if (isDown && (index == WOLRD_BLOCK_DOWN || index == WOLRD_BLOCK_RIGHT))
+	{
+		return false;
+	}
+	else if (isUp && (index == WOLRD_BLOCK_UP || index == WOLRD_BLOCK_RIGHT))
+	{
+		return false;
+	}
+	else if (isRight && index == WOLRD_BLOCK_RIGHT)
+	{
+		return false;
+	}
+	else if (isLeft && index == WOLRD_BLOCK_LEFT)
+	{
+		return false;
+	}
+	return index;
+}

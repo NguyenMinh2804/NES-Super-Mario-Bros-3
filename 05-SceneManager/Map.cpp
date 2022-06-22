@@ -35,6 +35,7 @@ void Map::CreateTilesFromTileSet()
 		this->tiles.push_back(Tile);
 	}
 }
+
 void Map::LoadMatrix(LPCWSTR path)
 {
 	ifstream file;
@@ -52,6 +53,7 @@ void Map::LoadMatrix(LPCWSTR path)
 	}
 	file.close();
 }
+
 void Map::Render(float l, float t, float r, float b)
 {
 
@@ -139,4 +141,21 @@ void Map::Init(int idMap, int nTitleCols, int nTitleRows, int nMapCols,
 	this->minY = minY;
 	this->minExtraMapX = minExtraMapX;
 	this->maxExtraMapX = maxExtraMapX;
+}
+
+void Map::LoadWorldMap(LPCWSTR path)
+{
+	ifstream file;
+
+	file.open(path);
+	this->worldMapMatrix = new int* [TOTAL_COLUMNS_WORLD_MAP];
+	for (int iRow = 0; iRow < TOTAL_COLUMNS_WORLD_MAP; iRow++)
+	{
+		this->worldMapMatrix[iRow] = new int[TOTAL_ROWS_WORLD_MAP];
+		for (int iColumn = 0; iColumn < TOTAL_ROWS_WORLD_MAP; iColumn++)
+		{
+			file >> this->worldMapMatrix[iRow][iColumn];
+		}
+	}
+	file.close();
 }

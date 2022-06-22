@@ -19,22 +19,14 @@
 #include "Brick2.h"
 #include "Map.h"
 #include "SampleKeyEventHandler.h"
+#include "World1KeyHandleEvent.h"
 #include "Mushroom.h"
 #include "FlyGoomba.h"
 #include "InvisibleWall.h"
 #include "Wall.h"
 #include "Turtle.h"
 #include "Teleport.h"
-
-using namespace std;
-
-CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
-	CScene(id, filePath)
-{
-	player = NULL;
-	key_handler = new CSampleKeyHandler(this);
-}
-
+#include "Tree.h"
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
@@ -44,6 +36,23 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
+
+using namespace std;
+
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
+	CScene(id, filePath)
+{
+	player = NULL;
+	if (id == WORLD_1_ID)
+	{
+		key_handler = new CWorld1KeyHandleEvent(this);
+	}
+	else if (id == WORLD_1_1_ID)
+	{
+		key_handler = new CSampleKeyHandler(this);
+	}
+}
+
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -150,7 +159,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 	}
 	case OBJECT_TYPE_WOOD:
 	{
-		obj = new CWood(x, y); break;
+		float type = (float)atof(tokens[3].c_str());
+		obj = new CWood(x, y, type); break;
 	}
 	case OBJECT_TYPE_WATER_PIPE:
 	{
@@ -201,6 +211,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 		obj = new CTeleport(x, y, type, teleX, teleY);
 		break;
 	}
+	case OBJECT_TREE:
+	{
+		obj = new CTree(x, y);
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -216,11 +231,19 @@ void CPlayScene::_ParseSection_MAPS(string line)
 	if (tokens.size() < 2) return;
 	wstring mapInformationPath = ToWSTR(tokens[0]);
 	wstring MatrixPath = ToWSTR(tokens[1]);
-	gameTime = std::stoi(ToWSTR(tokens[2]));
 	map = new Map();
 	map->LoadInformation(mapInformationPath.c_str());
 	map->LoadMatrix(MatrixPath.c_str());
 	map->CreateTilesFromTileSet();
+	if(id == WORLD_1_ID)
+	{
+		wstring WorldMatrixPath = ToWSTR(tokens[2]);
+		map->LoadWorldMap(WorldMatrixPath.c_str());
+	}
+	else
+	{
+		this->gameTime = atoi(tokens[2].c_str());
+	}
 	DebugOut(L"\nParseSection_MAPS: Done");
 }
 

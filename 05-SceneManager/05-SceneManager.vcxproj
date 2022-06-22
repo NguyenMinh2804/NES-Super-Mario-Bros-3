@@ -177,12 +177,14 @@
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="Teleport.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="Turtle.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Wall.h" />
     <ClCompile Include="WaterPipe.cpp" />
     <ClCompile Include="Wood.cpp" />
+    <ClCompile Include="World1KeyHandleEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -221,10 +223,12 @@
     <ClInclude Include="Teleport.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="Turtle.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WaterPipe.h" />
     <ClInclude Include="Wood.h" />
+    <ClInclude Include="World1KeyHandleEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
