@@ -21,3 +21,4 @@ height	240
 40	resources/screens/screen1-1/screen1-1_bank.png
 50	resources/screens/screen1/screen1_bank.png
 60	resources/textures/panel.png
+61	resources/textures/panel2.png

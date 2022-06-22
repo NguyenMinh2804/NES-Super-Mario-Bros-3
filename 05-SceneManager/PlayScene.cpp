@@ -27,6 +27,7 @@
 #include "Turtle.h"
 #include "Teleport.h"
 #include "Tree.h"
+#include "Camel.h"
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
@@ -214,6 +215,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 	case OBJECT_TREE:
 	{
 		obj = new CTree(x, y);
+		break;
+	}
+	case OBJECT_CAMEL:
+	{
+		obj = new CCamel(x, y);
 		break;
 	}
 	default:
