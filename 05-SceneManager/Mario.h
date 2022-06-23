@@ -158,11 +158,13 @@
 #define MARIO_FLY_TIME 4000
 #define MARIO_TELEPORT_TIME 1000
 #define MARIO_DIE_TIME 2000
+#define MARIO_AUTO_WALK_TIME 2400
 #define WOLRD_MAP_TILE 32
 #define WOLRD_BLOCK_RIGHT 5
 #define WOLRD_BLOCK_LEFT 4
 #define WOLRD_BLOCK_UP	2
 #define WOLRD_BLOCK_DOWN 3
+#define MARIO_MOVE_SEED 2
 
 class CMario : public CGameObject
 {
@@ -178,7 +180,7 @@ class CMario : public CGameObject
 	ULONGLONG slow_fall_time;
 	ULONGLONG teleport_time;
 	ULONGLONG start_die;
-
+	ULONGLONG auto_walk_start;
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -203,6 +205,9 @@ public:
 	int level;
 	int teleX;
 	int teleY;
+	int moveX;
+	int moveY;
+	int portalId;
 	bool isPickUp = false;
 	BOOLEAN isOnPlatform;
 	int test;
@@ -215,6 +220,9 @@ public:
 	bool isTeleporting = false;
 	bool isTeleDown = false;
 	bool isTeleported = false;
+	bool isAutoWalk = false;
+	bool isMoveX = false;
+	bool isMoveY = false;
 	CMario(float x, float y, int gameTime) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -234,6 +242,7 @@ public:
 		coin = 0;
 		test = 0;
 		start_die = -1;
+		auto_walk_start = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -253,7 +262,6 @@ public:
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void SetLevel(int l);
@@ -267,4 +275,7 @@ public:
 	void GoDown();
 	void GoPlayScreen();
 	bool AllowMoveInWorldMap(int x, int y, bool isLeft, bool isRight, bool isUp, bool isDown);
+	void AutoWalk();
+	void MoveToPositionX();
+	void MoveToPositionY();
 };

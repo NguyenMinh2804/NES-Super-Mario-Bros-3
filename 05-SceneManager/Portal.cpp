@@ -2,13 +2,15 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id )
+CPortal::CPortal(float l, float t, float r, float b, int scene_id)
 {
 	this->scene_id = scene_id;
-	x = l; 
+	x = l;
 	y = t;
 	width = r - l;
 	height = b - t;
+	vy = 0;
+	touch_start = -1;
 }
 
 void CPortal::RenderBoundingBox()
@@ -34,13 +36,33 @@ void CPortal::RenderBoundingBox()
 
 void CPortal::Render()
 {
-	RenderBoundingBox();
+	CAnimations::GetInstance()->Get(ANI_PORTAL_ID)->Render(x, y, isTouch ? true : false);
+	//RenderBoundingBox();
 }
 
-void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
+void CPortal::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - width/2;
-	t = y - height/2;
-	r = x + width/2;
-	b = y + height/2;
+	l = x - width / 2;
+	t = y - height / 2;
+	r = x + width / 2;
+	b = y + height / 2;
+}
+
+void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (isTouch)
+	{
+		y += vy * dt;
+		if (GetTickCount64() - touch_start > PORTAL_FLY_TIME)
+		{
+			this->Delete();
+		}
+	}
+}
+
+void CPortal::Touch()
+{
+	vy = -PORTAL_FLY_SPEED;
+	isTouch = true;
+	touch_start = GetTickCount64();
 }

@@ -53,9 +53,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(MARIO_STATE_OPPOSITE);
 	}
 	Teleport();
+	AutoWalk();
+	if(isMoveX) MoveToPositionX();
+	if(isMoveY) MoveToPositionY();
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+void CMario::AutoWalk()
+{
+	if (isAutoWalk)
+	{
+		if (GetTickCount64() - auto_walk_start > MARIO_AUTO_WALK_TIME)
+		{
+			CGame::GetInstance()->InitiateSwitchScene(portalId);
+			isAutoWalk = false;
+			auto_walk_start - 1;
+		}
+		else
+		{
+			ax = MARIO_ACCEL_WALK_X;
+			vx = MARIO_WALKING_SPEED / 2;
+		}
+	}
+}
 void CMario::Teleport()
 {
 	if (isTeleporting && GetTickCount64() - teleport_time < MARIO_TELEPORT_TIME)
@@ -172,13 +192,17 @@ void CMario::OnCollisionWithTeleport(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	SetLevel(MARIO_LEVEL_FLY);
+	SetLevel(level + 1);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
 	e->obj->Delete();
-	SetLevel(MARIO_LEVEL_BIG);
+	if (mushroom->type == TYPE_MUSHROOM_RED)
+	{
+		SetLevel(level + 1);
+	}
 }
 
 void CMario::OnCollisionWithFire(LPCOLLISIONEVENT e)
@@ -245,11 +269,7 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 			{
 				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
 			}
-			else
-			{
-				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
-			}
-			if (e->ny < 0)
+			else if (e->ny < 0)
 			{
 				if (x + 4 > turtle->x + 8)
 				{
@@ -260,6 +280,11 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
 				}
 			}
+			else if (e->nx < 0)
+			{
+				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+			}
+
 		}
 	}
 	else
@@ -394,8 +419,11 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	isAutoWalk = true;
+	auto_walk_start = GetTickCount64();
+	CPortal* portal = dynamic_cast<CPortal*>(e->obj);
+	portal->Touch();
+	portalId = portal->GetSceneId();
 }
 
 int CMario::GetAniIdSmall()
@@ -673,6 +701,11 @@ void CMario::SetState(int state)
 		return;
 	};
 
+	if (isAutoWalk)
+	{
+		return;
+	}
+
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
@@ -803,9 +836,9 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_OPPOSITE:
 		vy = 0;
+		ay = 0;
 		vx = 0;
 		ax = 0;
-		ay = 0;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -860,10 +893,13 @@ void CMario::SetLevel(int l)
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	}if (l <= 3)
+	{
+		level = l;
+		CGame* game = CGame::GetInstance();
+		game->SetMarioLevel(l);
 	}
-	level = l;
-	CGame* game = CGame::GetInstance();
-	game->SetMarioLevel(l);
+
 }
 
 void CMario::TailAttack()
@@ -877,32 +913,36 @@ void CMario::TailAttack()
 
 void CMario::GoRight()
 {
-	if (AllowMoveInWorldMap((x + WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, true, false, false))
+	if (!isMoveX && !isMoveY && AllowMoveInWorldMap((x + WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, true, false, false))
 	{
-		SetPosition(x + WOLRD_MAP_TILE, y);
+		isMoveX = true;
+		moveX = x + WOLRD_MAP_TILE;
 	}
 }
 void CMario::GoLeft()
 {
-	if (AllowMoveInWorldMap((x - WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, true, false, false, false))
+	if (!isMoveX && !isMoveY && AllowMoveInWorldMap((x - WOLRD_MAP_TILE) / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, true, false, false, false))
 	{
-		SetPosition(x - WOLRD_MAP_TILE, y);
+		isMoveX = true;
+		moveX = x - WOLRD_MAP_TILE;
 	}
 }
 
 void CMario::GoDown()
 {
-	if (AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, false, true))
+	if (!isMoveX && !isMoveY &&  AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, false, true))
 	{
-		SetPosition(x , y + WOLRD_MAP_TILE);
+		isMoveY = true;
+		moveY = y + WOLRD_MAP_TILE;
 	}
 }
 
 void CMario::GoUp()
 {
-	if (AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y - WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, true, false))
+	if (!isMoveX && !isMoveY &&  AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y - WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, true, false))
 	{
-		SetPosition(x , y - WOLRD_MAP_TILE);
+		isMoveY = true;
+		moveY = y - WOLRD_MAP_TILE;
 	}
 }
 
@@ -937,4 +977,38 @@ bool CMario::AllowMoveInWorldMap(int x, int y, bool isLeft, bool isRight, bool i
 		return false;
 	}
 	return index;
+}
+
+void CMario::MoveToPositionX() {
+	if (this->x < moveX)
+	{
+		x = x + MARIO_MOVE_SEED;
+		isMoveX = true;
+	}
+	else if (this->x > moveX)
+	{
+		x = x - MARIO_MOVE_SEED;
+		isMoveX = true;
+	}
+	else if (x = moveX)
+	{
+		isMoveX= false;
+	}
+}
+
+void CMario:: MoveToPositionY() {
+	if (this->y < moveY)
+	{
+		y = y + MARIO_MOVE_SEED;
+		isMoveY = true;
+	}
+	else if (this->y > moveY)
+	{
+		y = y - MARIO_MOVE_SEED;
+		isMoveY = true;
+	}
+	else if (y = moveY)
+	{
+		isMoveY = false;
+	}
 }

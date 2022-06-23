@@ -10,7 +10,7 @@ resources/screens/screen1/screen1_Inf.txt	resources/screens/screen1/screen1_Matr
 
 [OBJECTS]
 #CAMEL
-22	152	112
+22	156	112
 
 #WOOD 
 8	64	16	1

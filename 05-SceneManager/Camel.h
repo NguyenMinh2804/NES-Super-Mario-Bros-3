@@ -9,7 +9,7 @@
 #define CAMEL_BBOX_HEIGHT 16
 #define ID_ANI_CAMEL_WALKING_RIGHT 35
 #define ID_ANI_CAMEL_WALKING_LEFT 36
-#define CAMEL_DISTANCE_MAX 4
+#define CAMEL_DISTANCE_MAX 6
 
 class CCamel : public CGameObject
 {

@@ -5,8 +5,8 @@
 #define ID_ANI_BRICK2 190
 #define BRICK2_BBOX_WIDTH 16
 #define BRICK2_BBOX_HEIGHT 16
-#define HAVE_ITEM 1
-
+#define ITEM_BUTTON 1
+#define ITEM_GREEN_MUSHROOM 2
 class CBrick2 : public CGameObject {
 public:
 	int type;

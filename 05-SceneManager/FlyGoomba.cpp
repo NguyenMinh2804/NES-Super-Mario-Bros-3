@@ -35,9 +35,9 @@ void CFlyGoomba::GetBoundingBox(float& left, float& top, float& right, float& bo
 		}
 		else
 		{
-			left = x - FLYGOOMBA_FLY_BBOX_WIDTH / 2;
+			left = x - FLYGOOMBA_BBOX_WIDTH / 2;
 			top = y - FLYGOOMBA_FLY_BBOX_HEIGHT / 2;
-			right = left + FLYGOOMBA_FLY_BBOX_WIDTH;
+			right = left + FLYGOOMBA_BBOX_WIDTH;
 			bottom = top + FLYGOOMBA_FLY_BBOX_HEIGHT;
 		}
 	}
@@ -99,6 +99,7 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (GetTickCount64() - walk_start > WALK_TIME)
 			{
 				SetState(FLYGOOMBA_STATE_FLY);
+				isOnPlatform = false;
 			}
 		}
 		else
@@ -137,7 +138,7 @@ void CFlyGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CFlyGoomba::SetState(int state)

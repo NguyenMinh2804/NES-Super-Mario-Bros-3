@@ -35,9 +35,17 @@ void CBrick2::DropItem()
 	CGameObject* obj;
 	CGameObject* obj2;
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	if (type == HAVE_ITEM)
+	if (type == ITEM_BUTTON)
 	{
 		obj = new CButton(x, y - 16);
+		obj2 = new CBrickQuestion(x, y, 1);
+		obj2->SetState(0);
+		currentScene->AddObject(obj);
+		currentScene->AddObject(obj2);
+	}
+	else if(type == ITEM_GREEN_MUSHROOM)
+	{
+		obj = new CMushroom(x, y - 16, TYPE_MUSHROOM_GREEN);
 		obj2 = new CBrickQuestion(x, y, 1);
 		obj2->SetState(0);
 		currentScene->AddObject(obj);
