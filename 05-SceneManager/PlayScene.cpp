@@ -28,6 +28,8 @@
 #include "Teleport.h"
 #include "Tree.h"
 #include "Camel.h"
+#include "IntroKeyHandleEvent.h"
+#include "Intro.h"
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
@@ -51,6 +53,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	else if (id == WORLD_1_1_ID)
 	{
 		key_handler = new CSampleKeyHandler(this);
+	}
+	else if(id == INTRO_SCREEN_ID)
+	{
+		key_handler = new CIntroKeyHandleEvent(this);
 	}
 }
 
@@ -222,6 +228,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line, int objId)
 		obj = new CCamel(x, y);
 		break;
 	}
+	case OBJECT_INTRO:
+	{
+		
+		obj = new CIntro(x, y);
+		intro = (CIntro*)obj;
+		break;
+	}
+	
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -238,17 +252,24 @@ void CPlayScene::_ParseSection_MAPS(string line)
 	wstring mapInformationPath = ToWSTR(tokens[0]);
 	wstring MatrixPath = ToWSTR(tokens[1]);
 	map = new Map();
-	map->LoadInformation(mapInformationPath.c_str());
-	map->LoadMatrix(MatrixPath.c_str());
-	map->CreateTilesFromTileSet();
+	if (id != INTRO_SCREEN_ID)
+	{
+		map->LoadInformation(mapInformationPath.c_str());
+		map->LoadMatrix(MatrixPath.c_str());
+		map->CreateTilesFromTileSet();
+	}
 	if(id == WORLD_1_ID)
 	{
 		wstring WorldMatrixPath = ToWSTR(tokens[2]);
 		map->LoadWorldMap(WorldMatrixPath.c_str());
 	}
-	else
+	if(id != WORLD_1_ID && id != INTRO_SCREEN_ID)
 	{
 		this->gameTime = atoi(tokens[2].c_str());
+	}
+	else
+	{
+		this->gameTime = 0;
 	}
 	DebugOut(L"\nParseSection_MAPS: Done");
 }
@@ -402,7 +423,10 @@ void CPlayScene::Render()
 	float t = cy;
 	float r = l + game->GetBackBufferWidth();
 	float b = t + game->GetBackBufferHeight();
-	this->map->Render(l, t, r, b);
+	if (id != INTRO_SCREEN_ID)
+	{
+		this->map->Render(l, t, r, b);
+	}
 	for (int i = 0; i < objects.size(); i++)
 	{
 		float objL, objT, objR, objB;

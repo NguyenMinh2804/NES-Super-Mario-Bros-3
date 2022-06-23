@@ -9,6 +9,7 @@
 #include "Map.h"
 //#include "Koopas.h"
 
+#define INTRO_SCREEN_ID 8
 #define WORLD_1_ID 7
 #define WORLD_1_1_ID 6
 
@@ -17,7 +18,7 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;
 	int gameTime;
 	void _ParseSection_MAPS(string line);
 	void _ParseSection_SPRITES(string line);
@@ -29,6 +30,7 @@ protected:
 	void LoadAssets(LPCWSTR assetFile);
 	
 public:
+	LPGAMEOBJECT intro;
 	Map* map = NULL;
 	CPlayScene(int id, LPCWSTR filePath);
 	vector<LPGAMEOBJECT> objects;

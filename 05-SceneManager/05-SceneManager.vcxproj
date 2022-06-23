@@ -162,6 +162,8 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Intro.cpp" />
+    <ClCompile Include="IntroKeyHandleEvent.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
@@ -207,6 +209,8 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="FLowerFire.h" />
+    <ClInclude Include="Intro.h" />
+    <ClInclude Include="IntroKeyHandleEvent.h" />
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Leaf.h" />

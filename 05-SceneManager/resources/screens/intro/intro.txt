@@ -1,0 +1,6 @@
+# list of object assets to load in this scene
+[ASSETS]
+resources/objects/intro.txt
+[MAPS]
+[OBJECTS]
+23	144	96

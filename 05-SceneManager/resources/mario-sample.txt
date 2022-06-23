@@ -1,5 +1,5 @@
 [SETTINGS]
-start	7
+start	8
 width	320
 height	240
 
@@ -9,6 +9,7 @@ height	240
 0	resources/screens/intro.txt
 6	resources/screens/screen1-1/screen1_1.txt
 7	resources/screens/screen1/screen1.txt
+8	resources/screens/intro/intro.txt
 
 # id	file 
 [TEXTURES]
@@ -22,3 +23,5 @@ height	240
 50	resources/screens/screen1/screen1_bank.png
 60	resources/textures/panel.png
 61	resources/textures/panel2.png
+62	resources/textures/TitleScreen.png
+63	resources/textures/player.png

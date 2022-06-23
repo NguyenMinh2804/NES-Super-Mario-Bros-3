@@ -23,8 +23,6 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 #
 
 [OBJECTS]
-#PORTAL
-50	100	384	116	400	7
 #Wall
 17	0	400
 17	0	384
@@ -266,7 +264,7 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 50	2720	336	2736	352	7
 
 # MARIO
-0	2500	250
+0	100	356
 
 # WATER_PIPE
 9	352	368	2	0
