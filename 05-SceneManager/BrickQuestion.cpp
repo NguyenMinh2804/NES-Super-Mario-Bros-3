@@ -27,7 +27,14 @@ void CBrickQuestion::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CBrickQuestion::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
+	if (isDrop)
+	{
+		if (GetTickCount64() - drop_start > BRICK_QUESTION_DROP_TIME)
+		{
+			y = y + BRICK_PUSHED;
+			isDrop = false;
+		}
+	}
 }
 
 void CBrickQuestion::SetState(int state)
@@ -37,6 +44,9 @@ void CBrickQuestion::SetState(int state)
 
 void CBrickQuestion::DropItem(int marioLevel)
 {
+	y = y - BRICK_PUSHED;
+	drop_start = GetTickCount64();
+	isDrop = true;
 	CGameObject* obj;
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 	if (type == HAVE_ITEM)
@@ -57,7 +67,7 @@ void CBrickQuestion::DropItem(int marioLevel)
 			currentScene->AddObject(obj);
 			break;
 		}
-		default: 
+		default:
 		{
 			obj = new CLeaf(x, y - 40);
 			currentScene->AddObject(obj);

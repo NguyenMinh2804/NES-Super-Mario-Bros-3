@@ -3,7 +3,18 @@
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
+	if (type == FLY_COIN)
+	{
+		animations->Get(ID_ANI_FLY_COIN)->Render(x, y);
+	}
+	else if (isPress)
+	{
+		CSprites::GetInstance()->Get(40001)->Draw(x, y);
+	}
+	else
+	{
+		animations->Get(ID_ANI_COIN)->Render(x, y);
+	}
 	//RenderBoundingBox();
 }
 

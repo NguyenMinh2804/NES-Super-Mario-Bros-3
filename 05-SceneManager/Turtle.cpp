@@ -82,11 +82,7 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
 	{
-		if (dynamic_cast<CInvisibleWall*>(e->obj) || dynamic_cast<CCoin*>(e->obj))
-		{
-			return;
-		}
-		else if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CFlyGoomba*>(e->obj) || dynamic_cast<CTurtle*>(e->obj) || dynamic_cast<CFlowerFire*>(e->obj))
+		if (dynamic_cast<CGoomba*>(e->obj) || dynamic_cast<CFlyGoomba*>(e->obj) || dynamic_cast<CTurtle*>(e->obj) || dynamic_cast<CFlowerFire*>(e->obj))
 		{
 			e->obj->Delete();
 			return;
@@ -106,6 +102,7 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
 			brick->DropItem();
 		}
+		if (!e->obj->IsBlocking()) return;
 	}
 	else if (isPickUp)
 	{
@@ -115,7 +112,6 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 			this->Delete();
 		}
 	}
-	if (dynamic_cast<CTurtle*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;

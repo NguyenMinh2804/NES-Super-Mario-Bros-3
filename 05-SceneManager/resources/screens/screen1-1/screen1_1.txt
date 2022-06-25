@@ -117,6 +117,7 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 12	192	352	1
 12	224	304	1
 12	240	304	2
+12	416	320	1
 12	672	384	2
 12	720	352	1
 12	1520	368	2
@@ -264,7 +265,7 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 50	2720	336	2736	352	7
 
 # MARIO
-0	100	356
+0	50	356
 
 # WATER_PIPE
 9	352	368	2	0

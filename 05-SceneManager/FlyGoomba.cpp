@@ -12,7 +12,7 @@ CFlyGoomba::CFlyGoomba(float x, float y) :CGameObject(x, y)
 	die_start = -1;
 	isOnPlatform = true;
 	isFly = true;
-	vx = -FLYGOOMBA_WALKING_SPEED;
+	vx = FLYGOOMBA_WALKING_SPEED;
 }
 
 void CFlyGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -138,7 +138,7 @@ void CFlyGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CFlyGoomba::SetState(int state)

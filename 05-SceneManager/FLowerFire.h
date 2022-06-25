@@ -55,6 +55,7 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void Up();
 	void Down();
+	virtual int IsBlocking() { return 0; }
 	void SetState(int state);
 	void StartFire() {fire_start = GetTickCount64(); }
 	void StartUp() { up_start = GetTickCount64(); }

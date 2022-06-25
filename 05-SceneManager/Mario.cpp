@@ -37,6 +37,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (GetTickCount64() - fly_time > MARIO_FLY_TIME)
 	{
 		isAllowFlying = false;
+		fly_time = -1;
+		isFlying = false;
 	}
 
 	//if (GetTickCount64() - game_start > gameTime)
@@ -54,8 +56,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	Teleport();
 	AutoWalk();
-	if(isMoveX) MoveToPositionX();
-	if(isMoveY) MoveToPositionY();
+	if (isMoveX) MoveToPositionX();
+	if (isMoveY) MoveToPositionY();
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -265,24 +267,24 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 		}
 		else
 		{
-			if (e->nx > 0)
+			if (e->nx < 0)
 			{
 				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
 			}
-			else if (e->ny < 0)
+			else if(e->nx > 0)
 			{
-				if (x + 4 > turtle->x + 8)
-				{
-					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
-				}
-				else
+				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+			}
+			else
+			{
+				if (x < turtle->x + 6)
 				{
 					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
 				}
-			}
-			else if (e->nx < 0)
-			{
-				turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				else
+				{
+					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				}
 			}
 
 		}
@@ -291,6 +293,7 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 	{
 		if (e->ny < 0)
 		{
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
 			if (turtle->GetIsFly())
 			{
 				turtle->SetIsFly(false);
@@ -299,7 +302,6 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 			{
 				turtle->SetState(TURTLE_STATE_SHELL);
 			}
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else
 		{
@@ -757,14 +759,11 @@ void CMario::SetState(int state)
 		if (isOnPlatform)
 		{
 			isOnPlatform = false;
-			if (abs(this->vx) == MARIO_RUNNING_SPEED)
+			if (abs(ax) == MARIO_ACCEL_RUN_X)
 			{
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
-				if (abs(ax) == MARIO_ACCEL_RUN_X)
-				{
-					isAllowFlying = true;
-					fly_time = GetTickCount64();
-				}
+				isAllowFlying = true;
+				fly_time = GetTickCount64();
 			}
 			else
 			{
@@ -822,6 +821,16 @@ void CMario::SetState(int state)
 	case MARIO_STATE_SLOW_FALL:
 		vy = 0;
 		ay = MARIO_SLOW_GRAVITY;
+		if (nx == 1)
+		{
+			maxVx = MARIO_WALKING_SPEED;
+			ax = MARIO_ACCEL_WALK_X;
+		}
+		else if (nx == -1)
+		{
+			maxVx = -MARIO_WALKING_SPEED;
+			ax = -MARIO_ACCEL_WALK_X;
+		}
 		isAllowFlying = false;
 		isFlying = false;
 		break;
@@ -930,7 +939,7 @@ void CMario::GoLeft()
 
 void CMario::GoDown()
 {
-	if (!isMoveX && !isMoveY &&  AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, false, true))
+	if (!isMoveX && !isMoveY && AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y + WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, false, true))
 	{
 		isMoveY = true;
 		moveY = y + WOLRD_MAP_TILE;
@@ -939,7 +948,7 @@ void CMario::GoDown()
 
 void CMario::GoUp()
 {
-	if (!isMoveX && !isMoveY &&  AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y - WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, true, false))
+	if (!isMoveX && !isMoveY && AllowMoveInWorldMap(x / WOLRD_MAP_TILE, (y - WOLRD_MAP_TILE + WOLRD_MAP_TILE / 2) / WOLRD_MAP_TILE, false, false, true, false))
 	{
 		isMoveY = true;
 		moveY = y - WOLRD_MAP_TILE;
@@ -992,11 +1001,11 @@ void CMario::MoveToPositionX() {
 	}
 	else if (x = moveX)
 	{
-		isMoveX= false;
+		isMoveX = false;
 	}
 }
 
-void CMario:: MoveToPositionY() {
+void CMario::MoveToPositionY() {
 	if (this->y < moveY)
 	{
 		y = y + MARIO_MOVE_SEED;

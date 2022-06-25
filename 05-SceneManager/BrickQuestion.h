@@ -9,13 +9,18 @@
 #define HAVE_ITEM 1
 #define BRICK_QUESTION_STATE_NORMAL 1
 #define BRICK_QUESTION_STATE_BROKEN 0
+#define BRICK_QUESTION_DROP_TIME 120
+#define BRICK_PUSHED 4
 
 class CBrickQuestion : public CGameObject {
 public:
 	int type;
+	ULONGLONG drop_start;
+	bool isDrop = false;
 	CBrickQuestion(float x, float y, int type) : CGameObject(x, y) {
 		this->type = type;
-		SetState(1);
+		drop_start = -1;
+		SetState(BRICK_QUESTION_STATE_NORMAL);
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

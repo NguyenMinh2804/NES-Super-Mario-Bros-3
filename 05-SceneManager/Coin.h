@@ -5,23 +5,26 @@
 #include "Animations.h"
 
 #define ID_ANI_COIN 11000
+#define ID_ANI_FLY_COIN 11001
 #define COIN_BBOX_WIDTH 10
 #define COIN_BBOX_HEIGHT 16
 #define FLY_COIN 1
-#define FLY_COIN_SPEED -0.5f
-#define FLY_COIN_GRAVITY 0.002f
-#define FLY_COIN_TIME 400
+#define FLY_COIN_SPEED -0.35f
+#define FLY_COIN_GRAVITY 0.0012f
+#define FLY_COIN_TIME 550
 
 class CCoin : public CGameObject {
 	float ay;
 	ULONGLONG drop_start;
 	int type;
+	bool isPress = false;
 public:
-	CCoin(float x, float y, int type) : CGameObject(x, y) {
+	CCoin(float x, float y, int type, bool isPress = false) : CGameObject(x, y) {
 		this->type = type;
 		vy = 0;
 		ay = FLY_COIN_GRAVITY;
 		drop_start = -1;
+		this->isPress = isPress;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -51,11 +51,7 @@ protected:
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() {
-		//if(state == TURTLE_STATE_SHELL)
-		//{
-		//	return 0;
-		//}
-		return 1; 
+		return 0; 
 	}
 	virtual void OnNoCollision(DWORD dt);
 

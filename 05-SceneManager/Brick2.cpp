@@ -45,7 +45,7 @@ void CBrick2::DropItem()
 	}
 	else if(type == ITEM_GREEN_MUSHROOM)
 	{
-		obj = new CMushroom(x, y - 16, TYPE_MUSHROOM_GREEN);
+		obj = new CMushroom(x, y - 20, TYPE_MUSHROOM_GREEN);
 		obj2 = new CBrickQuestion(x, y, 1);
 		obj2->SetState(0);
 		currentScene->AddObject(obj);
