@@ -243,12 +243,12 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 
 19	1472	128	2
 #TURTLE
-18	560	336	1	0
-18	1530	368	0	0
+18	560	354	1	0
+18	1530	386	0	0
 18	1344	270	0	1
 18	1392	270	0	1
 18	1440	270	0	1
-18	2144	352	1	0
+18	2144	364	1	0
 
 #GOOMBA
 2	224	400

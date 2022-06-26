@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Map.h"
+#include "Turtle.h"
 //#include "Koopas.h"
 
 #define INTRO_SCREEN_ID 8
@@ -34,6 +35,7 @@ public:
 	Map* map = NULL;
 	CPlayScene(int id, LPCWSTR filePath);
 	vector<LPGAMEOBJECT> objects;
+	vector<CTurtle> reSurrectionObjects;
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

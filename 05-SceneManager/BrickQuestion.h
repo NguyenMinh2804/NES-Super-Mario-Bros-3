@@ -9,8 +9,8 @@
 #define HAVE_ITEM 1
 #define BRICK_QUESTION_STATE_NORMAL 1
 #define BRICK_QUESTION_STATE_BROKEN 0
-#define BRICK_QUESTION_DROP_TIME 120
-#define BRICK_PUSHED 4
+#define BRICK_QUESTION_DROP_TIME 100
+#define BRICK_PUSHED 6
 
 class CBrickQuestion : public CGameObject {
 public:

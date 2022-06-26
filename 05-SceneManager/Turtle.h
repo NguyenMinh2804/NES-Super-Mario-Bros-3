@@ -41,8 +41,6 @@ protected:
 	int ID_ANI_TURTLE_WALKING_LEFT, ID_ANI_TURTLE_WALKING_RIGHT, ID_ANI_TURTLE_SHELL, ID_ANI_TURTLE_ATTACK;
 	float ax;
 	float ay;
-	bool isRed;
-	bool isFly;
 	ULONGLONG shell_start;
 	ULONGLONG attack_start;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -58,6 +56,8 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
+	bool isFly;
+	bool isRed;
 	bool isPickUp = false;
 	CTurtle(float x, float y, bool isRed, bool isFly);
 	virtual void SetState(int state);
