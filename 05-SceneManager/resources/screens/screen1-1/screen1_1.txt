@@ -17,6 +17,7 @@ resources/objects/flyGoomba.txt
 resources/objects/turtle.txt
 resources/objects/brick2.txt
 resources/objects/button.txt
+resources/objects/effect.txt
 
 [MAPS]
 resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen1-1_Matrix.txt	1000000

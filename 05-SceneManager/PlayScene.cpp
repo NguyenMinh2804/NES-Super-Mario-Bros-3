@@ -375,26 +375,34 @@ void CPlayScene::Update(DWORD dt)
 	float t = cy1;
 	float r = l + game->GetBackBufferWidth();
 	float b = t + game->GetBackBufferHeight();
-	for (size_t i = 0; i < reSurrectionObjects.size(); i++)
+	
+	if (id != INTRO_SCREEN_ID && id != WORLD_1_ID)
 	{
-		if (!LinearSearch(reSurrectionObjects[i].id))
+		for (size_t i = 0; i < reSurrectionObjects.size(); i++)
 		{
-			CGameObject* obj = new CTurtle(reSurrectionObjects[i].x, reSurrectionObjects[i].y, reSurrectionObjects[i].isRed, reSurrectionObjects[i].isFly);
-			obj->id = reSurrectionObjects[i].id;
-			float objL, objT, objR, objB;
-			obj->GetBoundingBox(objL, objT, objR, objB);
-			if (!(objL > l - (objR - objL) && objR < r + (objR - objL) && objT > t - (objB - objT) && objB < b + (objB - objT)))
+			if (!LinearSearch(reSurrectionObjects[i].id))
 			{
-				AddObject(obj);
+				CGameObject* obj = new CTurtle(reSurrectionObjects[i].x, reSurrectionObjects[i].y, reSurrectionObjects[i].isRed, reSurrectionObjects[i].isFly);
+				obj->id = reSurrectionObjects[i].id;
+				float objL, objT, objR, objB;
+				obj->GetBoundingBox(objL, objT, objR, objB);
+				if (!(objL > l - (objR - objL) && objR < r + (objR - objL) && objT > t - (objB - objT) && objB < b + (objB - objT)))
+				{
+					AddObject(obj);
+				}
 			}
 		}
 	}
+
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->y > map->maxY*2 && !dynamic_cast<CMario*>(objects[i]))
+		if (id != INTRO_SCREEN_ID && id != WORLD_1_ID)
 		{
-			objects[i]->Delete();
+			if (objects[i]->y > map->maxY * 2 && !dynamic_cast<CMario*>(objects[i]))
+			{
+				objects[i]->Delete();
+			}
 		}
 		coObjects.push_back(objects[i]);
 	}

@@ -9,6 +9,7 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "Brick2.h"
+#include "Effect.h"
 void CTail::Render()
 {
 	//RenderBoundingBox();
@@ -43,19 +44,23 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CFlyGoomba*>(e->obj))
 	{
 		e->obj->Delete();
+		Effect();
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 	{
 		e->obj->Delete();
+		Effect();
 	}
 	else if (dynamic_cast<CFlowerFire*>(e->obj))
 	{
 		e->obj->Delete();
+		Effect();
 	}
 	else if (dynamic_cast<CBrick2*>(e->obj))
 	{
 		CBrick2* brick = dynamic_cast<CBrick2*>(e->obj);
 		brick->DropItem();
+		Effect();
 	}
 	else if (dynamic_cast<CBrickQuestion*>(e->obj))
 	{
@@ -66,11 +71,22 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 			CBrickQuestion* brickQuestion = dynamic_cast<CBrickQuestion*>(e->obj);
 			brickQuestion->SetState(BRICK_QUESTION_STATE_BROKEN);
 			brickQuestion->DropItem(mario->level);
+			Effect();
 		}
+
 	}
 	else if (dynamic_cast<CTurtle*>(e->obj))
 	{
 		CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
 		turtle->SetState(TURTLE_STATE_SHELL);
+		Effect();
 	}
+}
+
+void CTail::Effect()
+{
+	int effectX = nx == 1 ? x + TAIL_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH / 2;
+	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+	CGameObject *effect = new CEffect(effectX, y);
+	currentScene->AddObject(effect);
 }

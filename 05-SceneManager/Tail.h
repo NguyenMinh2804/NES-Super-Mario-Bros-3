@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "effect.h"
 
 #define TAIL_BBOX_WIDTH 14
 #define TAIL_BBOX_HEIGHT 4
@@ -31,4 +32,5 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	void Effect();
 };

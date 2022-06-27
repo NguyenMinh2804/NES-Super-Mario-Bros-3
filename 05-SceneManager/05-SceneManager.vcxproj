@@ -155,6 +155,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="FlowerFire.cpp" />
     <ClCompile Include="FlyGoomba.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="FlyGoomba.h" />
     <ClInclude Include="Game.h" />

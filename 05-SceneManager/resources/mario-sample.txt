@@ -25,3 +25,4 @@ height	240
 61	resources/textures/panel2.png
 62	resources/textures/TitleScreen.png
 63	resources/textures/player.png
+64	resources/textures/effect.png
