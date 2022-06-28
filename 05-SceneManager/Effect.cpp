@@ -3,7 +3,14 @@
 
 void CEffect::Render()
 {
-	CSprites::GetInstance()->Get(ID_ANI_EFFECT)->Draw(x, y);
+	if (type == EFFECT_TAIL_ACTTACK)
+	{
+		CSprites::GetInstance()->Get(ID_ANI_EFFECT_TAIL_ACTTACK)->Draw(x, y);
+	}
+	else if (type == EFFECT_BRICK_BROKEN)
+	{
+		CAnimations::GetInstance()->Get(ID_ANI_EFFECT_BRICK_BROKEN)->Render(x, y);
+	}
 }
 
 void CEffect::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -16,8 +23,23 @@ void CEffect::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (GetTickCount64() - effect_start > EFFECT_TIME)
+	if (type == EFFECT_TAIL_ACTTACK)
 	{
-		this->Delete();
+		if (GetTickCount64() - effect_start > EFFECT_TIME_TAIL_ACTTACK)
+		{
+			this->Delete();
+		}
 	}
+	else
+	{
+		vy += ay * dt;
+		vx += ax * dt;
+		x += vx * dt;
+		y += vy * dt;
+		if (GetTickCount64() - effect_start > EFFECT_TIME_BRICK_BROKEN)
+		{
+			this->Delete();
+		}
+	}
+
 }

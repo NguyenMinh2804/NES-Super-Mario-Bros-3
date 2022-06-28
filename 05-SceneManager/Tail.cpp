@@ -90,6 +90,6 @@ void CTail::Effect()
 {
 	int effectX = nx == 1 ? x + TAIL_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH / 2;
 	CPlayScene* currentScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-	CGameObject *effect = new CEffect(effectX, y);
+	CGameObject *effect = new CEffect(effectX, y, EFFECT_TAIL_ACTTACK, 0);
 	currentScene->AddObject(effect);
 }
