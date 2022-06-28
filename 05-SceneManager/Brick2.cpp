@@ -52,14 +52,17 @@ void CBrick2::DropItem()
 		currentScene->AddObject(obj);
 		currentScene->AddObject(obj2);
 	}
-	CGameObject* effect1 = new CEffect(x - 8, y - 8, EFFECT_BRICK_BROKEN, EFFECT_LEFT);
-	CGameObject* effect2 = new CEffect(x - 8, y + 8, EFFECT_BRICK_BROKEN, EFFECT_LEFT);
-	CGameObject* effect3 = new CEffect(x + 8, y - 8, EFFECT_BRICK_BROKEN, EFFECT_RIGHT);
-	CGameObject* effect4 = new CEffect(x + 8, y + 8, EFFECT_BRICK_BROKEN, EFFECT_RIGHT);
-	currentScene->AddObject(effect1);
-	currentScene->AddObject(effect2);
-	currentScene->AddObject(effect3);
-	currentScene->AddObject(effect4);
+	else
+	{
+		CGameObject* effect1 = new CEffect(x - 8, y - 8, EFFECT_BRICK_BROKEN, EFFECT_LEFT);
+		CGameObject* effect2 = new CEffect(x - 8, y + 8, EFFECT_BRICK_BROKEN, EFFECT_LEFT);
+		CGameObject* effect3 = new CEffect(x + 8, y - 8, EFFECT_BRICK_BROKEN, EFFECT_RIGHT);
+		CGameObject* effect4 = new CEffect(x + 8, y + 8, EFFECT_BRICK_BROKEN, EFFECT_RIGHT);
+		currentScene->AddObject(effect1);
+		currentScene->AddObject(effect2);
+		currentScene->AddObject(effect3);
+		currentScene->AddObject(effect4);
+	}
 	this->Delete();
 
 }
