@@ -251,13 +251,6 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 18	1440	270	0	1
 18	2144	364	1	0
 
-#GOOMBA
-2	224	400
-2	528	400
-2	816	384
-2	864	384
-15	928	384
-
 #TELEPORT 
 20	2312	112	0	2992	250
 20	3224	240	1	2376	392
@@ -449,3 +442,11 @@ resources/screens/screen1-1/screen1-1_Inf.txt	resources/screens/screen1-1/screen
 6	2816	416	2
 6	2832	416	2
 6	2848	416	3
+
+#GOOMBA
+2	224	400
+2	528	400
+2	816	384
+2	864	384
+15	928	384
+

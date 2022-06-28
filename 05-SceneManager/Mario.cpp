@@ -259,7 +259,7 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 {
 	CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
-	if (turtle->GetState() == TURTLE_STATE_SHELL)
+	if (turtle->GetState() == TURTLE_STATE_SHELL || turtle->GetState() == TURTLE_STATE_SHELL_BY_TAIL)
 	{
 		if (isPickUp)
 		{
@@ -307,7 +307,7 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 		{
 			if (untouchable == 0)
 			{
-				if (turtle->GetState() != TURTLE_STATE_SHELL)
+				if (turtle->GetState() != TURTLE_STATE_SHELL && turtle->GetState() != TURTLE_STATE_SHELL_BY_TAIL)
 				{
 					if (level > MARIO_LEVEL_SMALL)
 					{
@@ -340,7 +340,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != GOOMBA_STATE_DIE && goomba->GetState() != GOOMBA_STATE_DIE_BY_TAIL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -379,7 +379,7 @@ void CMario::OnCollisionWithFlyGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (flyGoomba->GetState() != FLYGOOMBA_STATE_DIE)
+			if (flyGoomba->GetState() != FLYGOOMBA_STATE_DIE && flyGoomba->GetState() != FLYGOOMBA_STATE_DIE_BY_TAIL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{

@@ -43,12 +43,14 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CFlyGoomba*>(e->obj))
 	{
-		e->obj->Delete();
+		dynamic_cast<CFlyGoomba*>(e->obj)->marioNX = nx;
+		dynamic_cast<CFlyGoomba*>(e->obj)->SetState(FLYGOOMBA_STATE_DIE_BY_TAIL);
 		Effect();
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj))
 	{
-		e->obj->Delete();
+		dynamic_cast<CGoomba*>(e->obj)->marioNX = nx;
+		dynamic_cast<CGoomba*>(e->obj)->SetState(GOOMBA_STATE_DIE_BY_TAIL);
 		Effect();
 	}
 	else if (dynamic_cast<CFlowerFire*>(e->obj))
@@ -78,7 +80,8 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CTurtle*>(e->obj))
 	{
 		CTurtle* turtle = dynamic_cast<CTurtle*>(e->obj);
-		turtle->SetState(TURTLE_STATE_SHELL);
+		turtle->marioNX = nx;
+		turtle->SetState(TURTLE_STATE_SHELL_BY_TAIL);
 		Effect();
 	}
 }

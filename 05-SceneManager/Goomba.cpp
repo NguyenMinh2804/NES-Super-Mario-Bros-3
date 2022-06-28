@@ -60,7 +60,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDeleted = true;
 		return;
 	}
-
+	else if ((state == GOOMBA_STATE_DIE_BY_TAIL) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT * 2))
+	{
+		isDeleted = true;
+		return;
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -72,6 +76,10 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
+	}
+	else if (state == GOOMBA_STATE_DIE_BY_TAIL)
+	{
+		aniId = ID_ANI_GOOMBA_DIE_BY_TAIL;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -90,6 +98,12 @@ void CGoomba::SetState(int state)
 		vy = 0;
 		ay = 0;
 		break;
+	case GOOMBA_STATE_DIE_BY_TAIL:
+		die_start = GetTickCount64();
+		vx = marioNX == 1 ? GOOMBA_WALKING_SPEED : -GOOMBA_WALKING_SPEED;
+		vy = -GOOMBA_DIE_SPEED;
+		ay = GOOMBA_GRAVITY / 2;
+		break;	
 	case GOOMBA_STATE_WALKING:
 		vx = -GOOMBA_WALKING_SPEED;
 		break;

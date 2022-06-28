@@ -17,6 +17,7 @@ height	240
 1	resources/textures/mario2.png
 10	resources/textures/enemies.png
 11	resources/textures/enemies2.png
+12	resources/textures/enemies3.png
 20	resources/textures/misc.png
 30	resources/textures/tiles.png
 40	resources/screens/screen1-1/screen1-1_bank.png

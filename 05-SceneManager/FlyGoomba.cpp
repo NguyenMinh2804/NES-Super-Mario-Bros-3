@@ -101,21 +101,29 @@ void CFlyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(FLYGOOMBA_STATE_FLY);
 				isOnPlatform = false;
 			}
+			else
+			{
+				vy += ay * dt;
+			}
 		}
 		else
 		{
-			vy += ay * dt;
 			StartWalk();
+			vy += ay * dt;
 		}
 	}
 	else
 	{
 		vy += ay * dt;
 	}
-	//vy += ay * dt;
 	vx += ax * dt;
 
 	if ((state == FLYGOOMBA_STATE_DIE) && (GetTickCount64() - die_start > FLYGOOMBA_DIE_TIMEOUT))
+	{
+		isDeleted = true;
+		return;
+	}
+	else if ((state == FLYGOOMBA_STATE_DIE_BY_TAIL) && (GetTickCount64() - die_start > FLYGOOMBA_DIE_TIMEOUT * 2))
 	{
 		isDeleted = true;
 		return;
@@ -130,13 +138,16 @@ void CFlyGoomba::Render()
 	int aniId = ID_ANI_FLYGOOMBA_WALKING;
 	if (isFly)
 	{
-		aniId = ID_ANI_FLYGOOMBA_FLY;
+		aniId = isOnPlatform ? ID_ANI_FLYGOOMBA_FLY_WALKING : ID_ANI_FLYGOOMBA_FLY;
 	}
 	else if (state == FLYGOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_FLYGOOMBA_DIE;
 	}
-
+	else if (state == FLYGOOMBA_STATE_DIE_BY_TAIL)
+	{
+		aniId = ID_ANI_FLYGOOMBA_DIE_BY_TAIL;
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -148,7 +159,6 @@ void CFlyGoomba::SetState(int state)
 	{
 	case FLYGOOMBA_STATE_FLY:
 		vy = -FLY_SPEED;
-		isOnPlatform = false;
 		break;
 	case FLYGOOMBA_STATE_DIE:
 		die_start = GetTickCount64();
@@ -157,6 +167,15 @@ void CFlyGoomba::SetState(int state)
 		vy = 0;
 		ay = 0;
 		break;
+	case FLYGOOMBA_STATE_DIE_BY_TAIL:
+	{
+		die_start = GetTickCount64();
+		vx = marioNX == 1 ? FLYGOOMBA_WALKING_SPEED : -FLYGOOMBA_WALKING_SPEED;
+		vy = -FLYGOOMBA_DIE_SPEED;
+		ay = FLYGOOMBA_FLY_GRAVITY;
+		isFly = false;
+		break;
 	}
+}
 }
 

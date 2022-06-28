@@ -26,6 +26,8 @@ CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 		ID_ANI_TURTLE_WALKING_RIGHT = ID_ANI_TURTLE_RED_WALKING_RIGHT
 		ID_ANI_TURTLE_SHELL = ID_ANI_TURTLE_RED_SHELL;
 		ID_ANI_TURTLE_ATTACK = ID_ANI_TURTLE_RED_ATTACK;
+		ID_ANI_TURTLE_SHELL_BY_TAIL = ID_ANI_TURTLE_RED_SHELL_BY_TAIL;
+		ID_ANI_TURTLE_ATTACK_BY_TAIL = ID_ANI_TURTLE_RED_ATTACK_BY_TAIL
 	}
 	else
 	{
@@ -33,13 +35,15 @@ CTurtle::CTurtle(float x, float y, bool isRed, bool isFly) :CGameObject(x, y)
 		ID_ANI_TURTLE_WALKING_RIGHT = ID_ANI_TURTLE_GREEN_WALKING_RIGHT;
 		ID_ANI_TURTLE_SHELL = ID_ANI_TURTLE_GREEN_SHELL;
 		ID_ANI_TURTLE_ATTACK = ID_ANI_TURTLE_GREEN_ATTACK;
+		ID_ANI_TURTLE_SHELL_BY_TAIL = ID_ANI_TURTLE_GREEN_SHELL_BY_TAIL;
+		ID_ANI_TURTLE_ATTACK_BY_TAIL = ID_ANI_TURTLE_GREEN_ATTACK_BY_TAIL;
 	}
 
 }
 
 void CTurtle::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == TURTLE_STATE_SHELL || state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
+	if (state == TURTLE_STATE_SHELL || state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT || state == TURTLE_STATE_SHELL_BY_TAIL)
 	{
 		left = x - (TURTLE_BBOX_WIDTH - 2) / 2;
 		top = y - TURTLE_BBOX_HEIGHT_SHELL / 2;
@@ -115,6 +119,10 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+		if (e->ny < 0)
+		{
+			vy = 0;
+		}
 	}
 	else if (e->nx != 0)
 	{
@@ -124,6 +132,49 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (state == TURTLE_STATE_SHELL_BY_TAIL)
+	{
+		if (vy == 0)
+		{
+			vx = 0;
+		}
+		if ((GetTickCount64() - shell_start > TURTLE_SHELL_TIMEOUT))
+		{
+			y = y - 10;
+			SetState(TURTLE_STATE_WALKING);
+			isPickUp = false;
+		}
+		if (isPickUp)
+		{
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			if (mario->isPickUp == false)
+			{
+				if (mario->nx == 1)
+				{
+					SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
+				}
+				else
+				{
+					SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
+				}
+				isPickUp = false;
+			}
+			else
+			{
+				if (mario->nx == 1)
+				{
+					x = mario->x + 12;
+				}
+				else
+				{
+					x = mario->x - 12;
+				}
+				y = mario->y;
+				vy = 0;
+			}
+		}
+	}
+
 	if (isFly)
 	{
 		if (vy == 0)
@@ -141,7 +192,6 @@ void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 	}
 	vx += ax * dt;
-
 	if (state == TURTLE_STATE_SHELL)
 	{
 		if (isPickUp)
@@ -198,9 +248,20 @@ void CTurtle::Render()
 	{
 		aniId = ID_ANI_TURTLE_SHELL;
 	}
+	else if (state == TURTLE_STATE_SHELL_BY_TAIL)
+	{
+		aniId = ID_ANI_TURTLE_SHELL_BY_TAIL;
+	}
 	else if (state == TURTLE_STATE_SHELL_ACTTACK_RIGHT || state == TURTLE_STATE_SHELL_ACTTACK_LEFT)
 	{
-		aniId = ID_ANI_TURTLE_ATTACK;
+		if (isActtackByTail)
+		{
+			aniId = ID_ANI_TURTLE_ATTACK_BY_TAIL;
+		}
+		else
+		{
+			aniId = ID_ANI_TURTLE_ATTACK;
+		}
 	}
 	else if (isFly)
 	{
@@ -236,6 +297,7 @@ void CTurtle::SetState(int state)
 	case TURTLE_STATE_SHELL:
 		shell_start = GetTickCount64();
 		vx = 0;
+		isActtackByTail = false;
 		break;
 	case TURTLE_STATE_SHELL_ACTTACK_RIGHT:
 		vx = TURTLE_ATTACK_SPEED;
@@ -252,6 +314,13 @@ void CTurtle::SetState(int state)
 	case TURTLE_STATE_FLY:
 		ay = TURTLE_FLY_GRAVITY;
 		vy = -TURTLE_FLY_SPEED;
+		break;
+	case TURTLE_STATE_SHELL_BY_TAIL:
+		ay = TURTLE_GRAVITY;
+		vx = marioNX == 1 ? TURTLE_WALKING_SPEED * 2 : -TURTLE_WALKING_SPEED * 2;
+		vy = -TURTLE_DIE_SPEED;
+		shell_start = GetTickCount64();
+		isActtackByTail = true;
 		break;
 	}
 }
