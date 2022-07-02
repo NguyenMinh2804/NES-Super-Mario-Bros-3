@@ -277,12 +277,14 @@ void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
 			}
 			else
 			{
-				if (x < turtle->x + 6)
+				if (x < turtle->x)
 				{
+					turtle->y = turtle->y - 1;
 					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_RIGHT);
 				}
 				else
 				{
+					turtle->y = turtle->y - 1;
 					turtle->SetState(TURTLE_STATE_SHELL_ACTTACK_LEFT);
 				}
 			}
@@ -366,6 +368,7 @@ void CMario::OnCollisionWithFlyGoomba(LPCOLLISIONEVENT e)
 		{
 			if (flyGoomba->GetIsFly())
 			{
+				flyGoomba->y = flyGoomba->y - 1;
 				flyGoomba->SetIsFly(false);
 			}
 			else
@@ -713,32 +716,46 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		if (ax < MARIO_ACCEL_RUN_X)
+		if (isFlying)
 		{
-			if (isOnPlatform)
-			{
-				ax += MARIO_RUN;
-			}
+			ax = MARIO_ACCEL_RUN_X;
 		}
 		else
 		{
-			ax = MARIO_ACCEL_RUN_X;
+			if (ax < MARIO_ACCEL_RUN_X)
+			{
+				if (isOnPlatform)
+				{
+					ax += MARIO_RUN;
+				}
+			}
+			else
+			{
+				ax = MARIO_ACCEL_RUN_X;
+			}
 		}
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		if (ax > -MARIO_ACCEL_RUN_X)
+		if (isFlying)
 		{
-			if (isOnPlatform)
-			{
-				ax -= MARIO_RUN;
-			}
+			ax = -MARIO_ACCEL_RUN_X;
 		}
 		else
 		{
-			ax = -MARIO_ACCEL_RUN_X;
+			if (ax > -MARIO_ACCEL_RUN_X)
+			{
+				if (isOnPlatform)
+				{
+					ax -= MARIO_RUN;
+				}
+			}
+			else
+			{
+				ax = -MARIO_ACCEL_RUN_X;
+			}
 		}
 		nx = -1;
 		break;
